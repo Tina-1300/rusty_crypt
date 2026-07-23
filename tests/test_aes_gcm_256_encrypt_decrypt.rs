@@ -9,27 +9,36 @@ mod tests {
     #[test]
     fn test_checked_good_encryption_decryption() {
         let message = "ceci est un test vous ne pourrez pas me retrouvez";
+
         let key = AesGeneratedKey.generate_key();
+
         let nonce = AesGcmGeneratedNonce;
+
         let encrypt_aes = AesGcmEncrypt::new(&nonce);
+
         let decrypt_aes = AesGcmDecrypt;
+
         let key_b64 = general_purpose::STANDARD.encode(key);
 
         let message_cipher = encrypt_aes.encrypt(message, &key_b64);
+
         assert_ne!(message, message_cipher);
 
-        let result = decrypt_aes.decrypt(&message_cipher, &key_b64);
+        let result = decrypt_aes
+            .decrypt(&message_cipher, &key_b64)
+            .expect("Decryption should succeed");
 
-        assert_eq!(message, result)
+        assert_eq!(message, result);
     }
 
     #[test]
     fn test_checked_good_encryption_decryption_full_bytes_version() {
-        let key_gen = AesGeneratedKey;
-        let key = key_gen.generate_key();
+        let key = AesGeneratedKey.generate_key();
 
         let nonce_gen = AesGcmGeneratedNonce;
+
         let encryptor = AesGcmEncrypt::new(&nonce_gen);
+
         let decryptor = AesGcmDecrypt;
 
         let message = b"Hello AES-256-GCM in bytes!";
@@ -37,16 +46,19 @@ mod tests {
         // Encrypt
         let (ciphertext, nonce) = encryptor.encrypt_bytes(message, &key);
 
-        // Concat nonce + ciphertext pour transmettre
+        // Concat nonce + ciphertext
         let mut full_cipher = Vec::new();
+
         full_cipher.extend_from_slice(&nonce);
+
         full_cipher.extend_from_slice(&ciphertext);
 
         // Decrypt
-        let decrypted = decryptor.decrypt_bytes(&full_cipher, &key);
+        let decrypted = decryptor
+            .decrypt_bytes(&full_cipher, &key)
+            .expect("Decryption should succeed");
 
         assert_eq!(decrypted, message);
-        //println!("Decrypted message: {:?}", String::from_utf8(decrypted).unwrap());
     }
 }
 
