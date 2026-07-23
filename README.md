@@ -1,6 +1,6 @@
 # rusty_crypt
 
-[![Crates.io](https://img.shields.io/crates/v/rusty_crypt.svg?cacheSeconds=60)](https://crates.io/crates/rusty_crypt)
+[![Crates.io](https://img.shields.io/crates/v/rusty_crypt.svg?cacheSeconds=15)](https://crates.io/crates/rusty_crypt)
 [![Documentation](https://docs.rs/rusty_crypt/badge.svg)](https://docs.rs/rusty_crypt)
 [![License](https://img.shields.io/crates/l/rusty_crypt.svg)](https://github.com/)
 
