@@ -15,7 +15,7 @@ aes-gcm = "0.10.3"
 base64 = "0.22.1"
 rand = "0.8"
 thiserror = "2.0.19"
-
+getrandom = "0.4.3"
 
 
 [profile.release]

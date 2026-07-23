@@ -10,7 +10,9 @@ mod tests {
     fn test_checked_good_encryption_decryption() {
         let message = "ceci est un test vous ne pourrez pas me retrouvez";
 
-        let key = AesGeneratedKey.generate_key();
+        let key = AesGeneratedKey
+            .generate_key()
+            .expect("Key generation should succeed");
 
         let nonce = AesGcmGeneratedNonce;
 
@@ -35,7 +37,9 @@ mod tests {
 
     #[test]
     fn test_checked_good_encryption_decryption_full_bytes_version() {
-        let key = AesGeneratedKey.generate_key();
+        let key = AesGeneratedKey
+            .generate_key()
+            .expect("Key generation should succeed");
 
         let nonce_gen = AesGcmGeneratedNonce;
 
@@ -62,62 +66,3 @@ mod tests {
         assert_eq!(decrypted, message);
     }
 }
-
-/*
-    // =========   Version 1 ==========
-
-    let txt_message = "I am Tina";
-
-    let key = AesGeneratedKey.generate_key_base64();
-
-    let nonce = AesGcmGeneratedNonce;
-
-    let aes_encryptor = AesGcmEncrypt::new(&nonce);
-
-    let txt_chiffre = aes_encryptor.encrypt(&txt_message, &KEY_ENC_DATA_BS64);
-
-    let txt_decrypt = AesGcmDecrypt.decrypt(&txt_chiffre, &KEY_ENC_DATA_BS64);
-
-    println!("txt : {:#}", txt_message);
-    println!("key : {:#}", key);
-    println!("txt encrypt : {:#}", txt_chiffre);
-    //println!("Nonce : {:#}", nonce_base64);
-    println!("txt decrypt : {:#}", txt_decrypt);
-
-    // ======================================================
-
-*/
-
-/*
-use rusty_crypt::{
-    AesGeneratedKey, AesGcmGeneratedNonce,
-    AesGcmEncrypt, AesGcmDecrypt,
-};
-
-fn main() {
-    let key_gen = AesGeneratedKey;
-    let key = key_gen.generate_key();
-
-    let nonce_gen = AesGcmGeneratedNonce;
-    let encryptor = AesGcmEncrypt::new(&nonce_gen);
-    let decryptor = AesGcmDecrypt;
-
-    let message = b"Hello AES-256-GCM in bytes!";
-
-    // Encrypt
-    let (ciphertext, nonce) = encryptor.encrypt_bytes(message, &key);
-
-    // Concat nonce + ciphertext pour transmettre
-    let mut full_cipher = Vec::new();
-    full_cipher.extend_from_slice(&nonce);
-    full_cipher.extend_from_slice(&ciphertext);
-
-    // Decrypt
-    let decrypted = decryptor.decrypt_bytes(&full_cipher, &key);
-
-    assert_eq!(decrypted, message);
-    println!("Decrypted message: {:?}", String::from_utf8(decrypted).unwrap());
-}
-
-
-*/

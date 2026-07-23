@@ -17,6 +17,9 @@ pub enum CryptoError {
     #[error("Invalid cipher text")]
     InvalidCiphertext,
 
+    #[error("Random generation failed")]
+    RandomGenerationFailed,
+
     #[error("Decryption failed")]
     DecryptionFailed,
 
