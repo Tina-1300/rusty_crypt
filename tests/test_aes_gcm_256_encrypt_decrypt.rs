@@ -20,7 +20,9 @@ mod tests {
 
         let key_b64 = general_purpose::STANDARD.encode(key);
 
-        let message_cipher = encrypt_aes.encrypt(message, &key_b64);
+        let message_cipher = encrypt_aes
+            .encrypt(message, &key_b64)
+            .expect("Encryption should succeed");
 
         assert_ne!(message, message_cipher);
 
@@ -43,17 +45,16 @@ mod tests {
 
         let message = b"Hello AES-256-GCM in bytes!";
 
-        // Encrypt
-        let (ciphertext, nonce) = encryptor.encrypt_bytes(message, &key);
+        let (ciphertext, nonce) = encryptor
+            .encrypt_bytes(message, &key)
+            .expect("Encryption should succeed");
 
-        // Concat nonce + ciphertext
         let mut full_cipher = Vec::new();
 
         full_cipher.extend_from_slice(&nonce);
 
         full_cipher.extend_from_slice(&ciphertext);
 
-        // Decrypt
         let decrypted = decryptor
             .decrypt_bytes(&full_cipher, &key)
             .expect("Decryption should succeed");
