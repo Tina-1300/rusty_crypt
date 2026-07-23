@@ -20,7 +20,7 @@ include = [
 ]
 
 [dependencies]
-aes-gcm = "0.10.3"
+aes-gcm = "0.11.0"
 base64 = "0.23.0"
 thiserror = "2.0.19"
 getrandom = "0.4.3"

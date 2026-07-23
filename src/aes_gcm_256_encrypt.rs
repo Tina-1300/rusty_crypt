@@ -1,6 +1,7 @@
 use aes_gcm::aead::{Aead, KeyInit};
 use aes_gcm::{Aes256Gcm, Key, Nonce};
 use base64::{Engine as _, engine::general_purpose};
+use std::convert::TryFrom;
 
 use crate::error::CryptoError;
 
@@ -178,16 +179,17 @@ impl<'a> AesGcmEncrypt<'a> {
             return Err(CryptoError::InvalidKeySize);
         }
 
-        let key = Key::<Aes256Gcm>::from_slice(&key_bytes);
+        let key =
+            Key::<Aes256Gcm>::try_from(&key_bytes[..]).map_err(|_| CryptoError::InvalidKeySize)?;
 
-        let cipher = Aes256Gcm::new(key);
+        let cipher = Aes256Gcm::new(&key);
 
         let nonce_bytes = self.nonce_generator.generate_nonce()?;
 
-        let nonce = Nonce::from_slice(&nonce_bytes);
+        let nonce = Nonce::try_from(&nonce_bytes[..]).map_err(|_| CryptoError::InvalidNonceSize)?;
 
         let ciphertext = cipher
-            .encrypt(nonce, plaintext.as_bytes())
+            .encrypt(&nonce, plaintext.as_bytes())
             .map_err(|_| CryptoError::EncryptionFailed)?;
 
         let ciphertext_base64 = general_purpose::STANDARD.encode(ciphertext);
@@ -288,16 +290,16 @@ impl<'a> AesGcmEncrypt<'a> {
             return Err(CryptoError::InvalidKeySize);
         }
 
-        let key = Key::<Aes256Gcm>::from_slice(key_bytes);
+        let key = Key::<Aes256Gcm>::try_from(key_bytes).map_err(|_| CryptoError::InvalidKeySize)?;
 
-        let cipher = Aes256Gcm::new(key);
+        let cipher = Aes256Gcm::new(&key);
 
         let nonce_bytes = self.nonce_generator.generate_nonce()?;
 
-        let nonce = Nonce::from_slice(&nonce_bytes);
+        let nonce = Nonce::try_from(&nonce_bytes[..]).map_err(|_| CryptoError::InvalidNonceSize)?;
 
         let ciphertext = cipher
-            .encrypt(nonce, plaintext)
+            .encrypt(&nonce, plaintext)
             .map_err(|_| CryptoError::EncryptionFailed)?;
 
         Ok((ciphertext, nonce_bytes))
