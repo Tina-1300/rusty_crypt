@@ -1,6 +1,6 @@
 [package]
 name = "rusty_crypt"
-version = "0.1.0"
+version = "0.2.0"
 edition = "2024"
 authors = ["Tina-1300"]
 description = "Rust library allowing for a very quick and simple implementation of AES-GCM encryption"
