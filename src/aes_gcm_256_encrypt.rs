@@ -1,26 +1,22 @@
-use aes_gcm::{Aes256Gcm, Key, Nonce};
 use aes_gcm::aead::{Aead, KeyInit};
-use base64::{engine::general_purpose, Engine as _};
+use aes_gcm::{Aes256Gcm, Key, Nonce};
+use base64::{Engine as _, engine::general_purpose};
 
 use super::aes_gcm_256_generated_nonce::AesGcmGeneratedNonce;
-
 
 pub struct AesGcmEncrypt<'a> {
     nonce_generator: &'a AesGcmGeneratedNonce,
 }
 
-
 impl<'a> AesGcmEncrypt<'a> {
-    
-
     pub fn new(nonce_generator: &'a AesGcmGeneratedNonce) -> Self {
         Self { nonce_generator }
     }
 
-
     pub fn encrypt(&self, plaintext: &str, base64_key: &str) -> String {
-
-        let key_bytes = general_purpose::STANDARD.decode(base64_key).expect("Invalid base64 key");
+        let key_bytes = general_purpose::STANDARD
+            .decode(base64_key)
+            .expect("Invalid base64 key");
 
         let key = Key::<Aes256Gcm>::from_slice(&key_bytes);
 
@@ -30,15 +26,15 @@ impl<'a> AesGcmEncrypt<'a> {
 
         let nonce = Nonce::from_slice(&nonce_bytes);
 
-        let cipher_text = cipher.encrypt(nonce, plaintext.as_bytes()).expect("Encryption failed");
-        
-        let cipher_text_finally = general_purpose::STANDARD.encode(cipher_text);
-        let nonce_finally =  general_purpose::STANDARD.encode(nonce_bytes);
-        
-        format!("{nonce_finally}::{cipher_text_finally}")
-        
-    }
+        let cipher_text = cipher
+            .encrypt(nonce, plaintext.as_bytes())
+            .expect("Encryption failed");
 
+        let cipher_text_finally = general_purpose::STANDARD.encode(cipher_text);
+        let nonce_finally = general_purpose::STANDARD.encode(nonce_bytes);
+
+        format!("{nonce_finally}::{cipher_text_finally}")
+    }
 
     pub fn encrypt_bytes(&self, plaintext: &[u8], key_bytes: &[u8; 32]) -> (Vec<u8>, [u8; 12]) {
         let key = Key::<Aes256Gcm>::from_slice(key_bytes);
@@ -51,9 +47,7 @@ impl<'a> AesGcmEncrypt<'a> {
 
         (ciphertext, nonce_bytes)
     }
-
 }
-
 
 /*
 

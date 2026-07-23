@@ -1,10 +1,9 @@
 #[cfg(test)]
 mod tests {
-    use rusty_crypt::aes_gcm_256_generated_nonce::AesGcmGeneratedNonce;
-    use rusty_crypt::aes_gcm_256_generated_key::AesGeneratedKey;
+    use base64::{Engine as _, engine::general_purpose};
     use rusty_crypt::aes_gcm_256_encrypt::AesGcmEncrypt;
-    use base64::{engine::general_purpose, Engine as _};
- 
+    use rusty_crypt::aes_gcm_256_generated_key::AesGeneratedKey;
+    use rusty_crypt::aes_gcm_256_generated_nonce::AesGcmGeneratedNonce;
 
     #[test]
     fn test_checked_good_encryption() {
@@ -12,16 +11,14 @@ mod tests {
         let key = AesGeneratedKey.generate_key();
         let nonce = AesGcmGeneratedNonce;
         //let nonce = AesGcmGeneratedNonce.generate_nonce();
-        let encrypt_aes = AesGcmEncrypt::new(&nonce);   
+        let encrypt_aes = AesGcmEncrypt::new(&nonce);
         let nonce_b64 = general_purpose::STANDARD.encode(key);
-        let message_cipher = encrypt_aes.encrypt(message, &nonce_b64);  
+        let message_cipher = encrypt_aes.encrypt(message, &nonce_b64);
         assert_ne!(message, message_cipher)
     }
 
-
-
     #[test]
-    fn test_checked_good_encryption_full_bytes_version(){
+    fn test_checked_good_encryption_full_bytes_version() {
         let key_gen = AesGeneratedKey;
         let key = key_gen.generate_key();
 
@@ -39,21 +36,16 @@ mod tests {
         full_cipher.extend_from_slice(&nonce);
         full_cipher.extend_from_slice(&ciphertext);
 
-
         // Decrypt
         //let decrypted = decryptor.decrypt_bytes(&full_cipher, &key);
 
         //assert_eq!(decrypted, message);
         //println!("Decrypted message: {:?}", String::from_utf8(decrypted).unwrap());
     }
-
-
 }
 
-
-
 /*
-    // =========   Version 1 ========== 
+    // =========   Version 1 ==========
 
     let txt_message = "I am Tina";
 
@@ -64,7 +56,7 @@ mod tests {
     let aes_encryptor = AesGcmEncrypt::new(&nonce);
 
     let txt_chiffre = aes_encryptor.encrypt(&txt_message, &KEY_ENC_DATA_BS64);
-    
+
     let txt_decrypt = AesGcmDecrypt.decrypt(&txt_chiffre, &KEY_ENC_DATA_BS64);
 
     println!("txt : {:#}", txt_message);

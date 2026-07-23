@@ -2,7 +2,6 @@
 mod tests {
     use rusty_crypt::aes_gcm_256_generated_nonce::AesGcmGeneratedNonce;
 
-
     /*
     #[test]
     fn it_works() {
@@ -13,16 +12,16 @@ mod tests {
     #[test]
     fn test_checked_type_generated_nonce_aes_gcm_256() {
         let _nonce = AesGcmGeneratedNonce.generate_nonce();
-        assert_eq!(_nonce.len(), 12, "nonce should be 12 bytes long for AES GCM 256");
-               
+        assert_eq!(
+            _nonce.len(),
+            12,
+            "nonce should be 12 bytes long for AES GCM 256"
+        );
     }
-
 }
 
-
-
 /*
-    // =========   Version 1 ========== 
+    // =========   Version 1 ==========
 
     let txt_message = "I am Tina";
 
@@ -33,7 +32,7 @@ mod tests {
     let aes_encryptor = AesGcmEncrypt::new(&nonce);
 
     let txt_chiffre = aes_encryptor.encrypt(&txt_message, &KEY_ENC_DATA_BS64);
-    
+
     let txt_decrypt = AesGcmDecrypt.decrypt(&txt_chiffre, &KEY_ENC_DATA_BS64);
 
     println!("txt : {:#}", txt_message);
