@@ -136,7 +136,8 @@ impl AesGcmDecrypt {
             .decode(parts[1])
             .map_err(CryptoError::InvalidBase64)?;
 
-        let key = Key::<Aes256Gcm>::try_from(&key_bytes[..]).map_err(|_| CryptoError::InvalidKeySize)?;
+        let key =
+            Key::<Aes256Gcm>::try_from(&key_bytes[..]).map_err(|_| CryptoError::InvalidKeySize)?;
         //let key = Key::<Aes256Gcm>::from_slice(&key_bytes);
 
         let cipher = Aes256Gcm::new(&key);
@@ -242,13 +243,11 @@ impl AesGcmDecrypt {
 
         let (nonce_bytes, ciphertext) = cipher_bytes.split_at(12);
 
-        let key = Key::<Aes256Gcm>::try_from(key_bytes)
-            .map_err(|_| CryptoError::InvalidKeySize)?;
+        let key = Key::<Aes256Gcm>::try_from(key_bytes).map_err(|_| CryptoError::InvalidKeySize)?;
 
         let cipher = Aes256Gcm::new(&key);
 
-        let nonce = Nonce::try_from(nonce_bytes)
-            .map_err(|_| CryptoError::InvalidNonceSize)?;
+        let nonce = Nonce::try_from(nonce_bytes).map_err(|_| CryptoError::InvalidNonceSize)?;
 
         cipher
             .decrypt(&nonce, ciphertext)

@@ -179,16 +179,14 @@ impl<'a> AesGcmEncrypt<'a> {
             return Err(CryptoError::InvalidKeySize);
         }
 
-        let key = Key::<Aes256Gcm>::try_from(&key_bytes[..])
-            .map_err(|_| CryptoError::InvalidKeySize)?;
+        let key =
+            Key::<Aes256Gcm>::try_from(&key_bytes[..]).map_err(|_| CryptoError::InvalidKeySize)?;
 
         let cipher = Aes256Gcm::new(&key);
 
         let nonce_bytes = self.nonce_generator.generate_nonce()?;
 
-        let nonce = Nonce::try_from(&nonce_bytes[..])
-            .map_err(|_| CryptoError::InvalidNonceSize)?;
-
+        let nonce = Nonce::try_from(&nonce_bytes[..]).map_err(|_| CryptoError::InvalidNonceSize)?;
 
         let ciphertext = cipher
             .encrypt(&nonce, plaintext.as_bytes())
@@ -292,16 +290,13 @@ impl<'a> AesGcmEncrypt<'a> {
             return Err(CryptoError::InvalidKeySize);
         }
 
-        let key = Key::<Aes256Gcm>::try_from(key_bytes)
-            .map_err(|_| CryptoError::InvalidKeySize)?;
+        let key = Key::<Aes256Gcm>::try_from(key_bytes).map_err(|_| CryptoError::InvalidKeySize)?;
 
         let cipher = Aes256Gcm::new(&key);
 
         let nonce_bytes = self.nonce_generator.generate_nonce()?;
 
-        let nonce = Nonce::try_from(&nonce_bytes[..])
-            .map_err(|_| CryptoError::InvalidNonceSize)?;
-
+        let nonce = Nonce::try_from(&nonce_bytes[..]).map_err(|_| CryptoError::InvalidNonceSize)?;
 
         let ciphertext = cipher
             .encrypt(&nonce, plaintext)
