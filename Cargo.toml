@@ -1,11 +1,11 @@
 [package]
 name = "rusty_crypt"
-version = "0.3.0"
+version = "0.3.1"
 edition = "2024"
 authors = ["Tina-1300"]
 description = "Rust library allowing for a very quick and simple implementation of AES-GCM encryption"
 license = "MIT"
-keywords = ["api", "cryptography", "aes-gcm", "fast", "rusty_crypt", "secure"]
+keywords = ["api", "cryptography", "aes-gcm", "rusty_crypt", "secure"]
 repository = "https://github.com/Tina-1300/rusty_crypt"
 rust-version = "1.97.1"
 
