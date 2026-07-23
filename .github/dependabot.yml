@@ -1,14 +1,14 @@
 version: 2
 
 updates:
-    - package-ecosystem: cargo
-      directory: "/"
-      schedule:
-          interval: weekly
-      target-branch: dev
+  - package-ecosystem: cargo
+    directory: "/"
+    schedule:
+      interval: weekly
+    target-branch: dev
 
-      groups:
-          rust-dependencies:
-              update-types:
-                  - "minor"
-                  - "patch"
+    groups:
+      rust-dependencies:
+        update-types:
+          - "minor"
+          - "patch"
