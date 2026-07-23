@@ -1,17 +1,13 @@
-//use rand::{TryRngCore};
-use rand::RngCore;
-use rand::rngs::OsRng;
+use crate::error::CryptoError;
 
 pub struct AesGcmGeneratedNonce;
 
 impl AesGcmGeneratedNonce {
-    pub fn generate_nonce(&self) -> [u8; 12] {
+    pub fn generate_nonce(&self) -> Result<[u8; 12], CryptoError> {
         let mut nonce_bytes = [0u8; 12];
 
-        let mut rng = OsRng;
+        getrandom::fill(&mut nonce_bytes).map_err(|_| CryptoError::RandomGenerationFailed)?;
 
-        let _ = rng.try_fill_bytes(&mut nonce_bytes);
-
-        nonce_bytes
+        Ok(nonce_bytes)
     }
 }

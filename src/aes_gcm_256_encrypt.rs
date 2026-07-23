@@ -28,7 +28,7 @@ impl<'a> AesGcmEncrypt<'a> {
 
         let cipher = Aes256Gcm::new(key);
 
-        let nonce_bytes = self.nonce_generator.generate_nonce();
+        let nonce_bytes = self.nonce_generator.generate_nonce()?;
 
         let nonce = Nonce::from_slice(&nonce_bytes);
 
@@ -56,7 +56,7 @@ impl<'a> AesGcmEncrypt<'a> {
 
         let cipher = Aes256Gcm::new(key);
 
-        let nonce_bytes = self.nonce_generator.generate_nonce();
+        let nonce_bytes = self.nonce_generator.generate_nonce()?;
 
         let nonce = Nonce::from_slice(&nonce_bytes);
 
@@ -67,38 +67,3 @@ impl<'a> AesGcmEncrypt<'a> {
         Ok((ciphertext, nonce_bytes))
     }
 }
-
-/*
-
-use rusty_crypt::{
-    AesGeneratedKey, AesGcmGeneratedNonce,
-    AesGcmEncrypt, AesGcmDecrypt,
-};
-
-fn main() {
-    let key_gen = AesGeneratedKey;
-    let key = key_gen.generate_key();
-
-    let nonce_gen = AesGcmGeneratedNonce;
-    let encryptor = AesGcmEncrypt::new(&nonce_gen);
-    let decryptor = AesGcmDecrypt;
-
-    let message = b"Hello AES-256-GCM in bytes!";
-
-    // Encrypt
-    let (ciphertext, nonce) = encryptor.encrypt_bytes(message, &key);
-
-    // Concat nonce + ciphertext pour transmettre
-    let mut full_cipher = Vec::new();
-    full_cipher.extend_from_slice(&nonce);
-    full_cipher.extend_from_slice(&ciphertext);
-
-    // Decrypt
-    let decrypted = decryptor.decrypt_bytes(&full_cipher, &key);
-
-    assert_eq!(decrypted, message);
-    println!("Decrypted message: {:?}", String::from_utf8(decrypted).unwrap());
-}
-
-
-*/

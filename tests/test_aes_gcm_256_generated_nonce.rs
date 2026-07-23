@@ -2,45 +2,31 @@
 mod tests {
     use rusty_crypt::aes_gcm_256_generated_nonce::AesGcmGeneratedNonce;
 
-    /*
-    #[test]
-    fn it_works() {
-
-    }
-    */
-
     #[test]
     fn test_checked_type_generated_nonce_aes_gcm_256() {
-        let _nonce = AesGcmGeneratedNonce.generate_nonce();
+        let nonce = AesGcmGeneratedNonce
+            .generate_nonce()
+            .expect("Nonce generation should succeed");
+
         assert_eq!(
-            _nonce.len(),
+            nonce.len(),
             12,
-            "nonce should be 12 bytes long for AES GCM 256"
+            "Nonce should be 12 bytes long for AES GCM 256"
         );
     }
+
+    #[test]
+    fn test_generated_nonce_should_be_random() {
+        let nonce_generator = AesGcmGeneratedNonce;
+
+        let nonce1 = nonce_generator
+            .generate_nonce()
+            .expect("Nonce generation should succeed");
+
+        let nonce2 = nonce_generator
+            .generate_nonce()
+            .expect("Nonce generation should succeed");
+
+        assert_ne!(nonce1, nonce2, "Generated nonces should not be identical");
+    }
 }
-
-/*
-    // =========   Version 1 ==========
-
-    let txt_message = "I am Tina";
-
-    let key = AesGeneratedKey.generate_key_base64();
-
-    let nonce = AesGcmGeneratedNonce;
-
-    let aes_encryptor = AesGcmEncrypt::new(&nonce);
-
-    let txt_chiffre = aes_encryptor.encrypt(&txt_message, &KEY_ENC_DATA_BS64);
-
-    let txt_decrypt = AesGcmDecrypt.decrypt(&txt_chiffre, &KEY_ENC_DATA_BS64);
-
-    println!("txt : {:#}", txt_message);
-    println!("key : {:#}", key);
-    println!("txt encrypt : {:#}", txt_chiffre);
-    //println!("Nonce : {:#}", nonce_base64);
-    println!("txt decrypt : {:#}", txt_decrypt);
-
-    // ======================================================
-
-*/
