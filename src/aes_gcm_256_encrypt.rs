@@ -95,6 +95,7 @@ impl<'a> AesGcmEncrypt<'a> {
     ///
     /// let encryptor = AesGcmEncrypt::new(&nonce);
     /// ```
+    #[inline]
     pub fn new(nonce_generator: &'a AesGcmGeneratedNonce) -> Self {
         Self { nonce_generator }
     }
@@ -170,6 +171,7 @@ impl<'a> AesGcmEncrypt<'a> {
     ///
     /// # Ok::<(), Box<dyn std::error::Error>>(())
     /// ```
+    #[inline]
     pub fn encrypt(&self, plaintext: &str, base64_key: &str) -> Result<String, CryptoError> {
         let key_bytes = general_purpose::STANDARD
             .decode(base64_key)
@@ -281,6 +283,7 @@ impl<'a> AesGcmEncrypt<'a> {
     ///
     /// # Ok::<(), Box<dyn std::error::Error>>(())
     /// ```
+    #[inline]
     pub fn encrypt_bytes(
         &self,
         plaintext: &[u8],

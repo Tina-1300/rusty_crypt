@@ -1,5 +1,4 @@
 use crate::error::CryptoError;
-
 /// AES-256 secure key generator.
 ///
 /// `AesGeneratedKey` provides a simple interface to generate cryptographically

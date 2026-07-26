@@ -21,15 +21,35 @@ include = [
 
 [dependencies]
 aes-gcm = "0.11.0"
+zeroize = "1.9.0"
 base64 = "0.23.0"
 thiserror = "2.0.19"
 getrandom = "0.4.3"
 
+[dev-dependencies]
+criterion = "0.8.2"
+
+[[bench]]
+name = "aes_gcm_encrypt"
+harness = false
+
 
 [profile.release]
-panic = "abort" # Strip expensive panic clean-up logic
-codegen-units = 1 # Compile crates one after another so the compiler can optimize better
-lto = true # Enables link to optimizations
-opt-level = "s" # Optimize for binary size
-strip = true # Remove debug symbols
-debug-assertions = false # Remove debug assertions
+opt-level = 3           # Optimisation maximale des performances
+lto = "fat"             # Optimisation LLVM complète entre les crates
+codegen-units = 1       # Meilleure optimisation, compilation plus lente
+strip = "symbols"       # Supprime les symboles inutiles
+debug = false           # Pas d'informations debug dans le build final
+debug-assertions = false
+overflow-checks = false
+incremental = false
+
+
+[profile.dev]
+opt-level = 1
+debug = true
+debug-assertions = true
+overflow-checks = true
+incremental = true
+
+
