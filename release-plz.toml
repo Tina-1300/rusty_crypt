@@ -1,4 +1,0 @@
-changelog_update = true
-git_tag_enable = true
-publish = true
-git_tag_name = "v{{ version }}"
