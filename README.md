@@ -1,8 +1,9 @@
 # rusty_crypt
 
-[![Crates.io](https://img.shields.io/crates/v/rusty_crypt.svg?cacheSeconds=1)](https://crates.io/crates/rusty_crypt)
+![Crates.io Version](https://img.shields.io/crates/v/rusty_crypt?style=plastic)
 [![Documentation](https://docs.rs/rusty_crypt/badge.svg)](https://docs.rs/rusty_crypt)
-[![License](https://img.shields.io/crates/l/rusty_crypt.svg)](https://github.com/)
+![Crates.io License](https://img.shields.io/crates/l/rusty_crypt?style=plastic)
+
 
 A simple and secure Rust library providing an easy-to-use interface for **AES-256-GCM authenticated encryption**.
 
