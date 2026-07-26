@@ -20,16 +20,6 @@ A simple and secure Rust library providing an easy-to-use interface for **AES-25
 
 ---
 
-# Installation
-
-Add `rusty_crypt` to your `Cargo.toml`:
-
-```toml
-[dependencies]
-rusty_crypt = "0.4.0"
-```
-
----
 
 # Overview
 
