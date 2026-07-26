@@ -1,24 +1,14 @@
 use std::hint::black_box;
 
-use criterion::{
-    criterion_group,
-    criterion_main,
-    BenchmarkId,
-    Criterion,
-    Throughput,
-};
+use criterion::{BenchmarkId, Criterion, Throughput, criterion_group, criterion_main};
+use rusty_crypt::{AesGcmEncrypt, AesGcmGeneratedNonce};
 use std::time::Duration;
-use rusty_crypt::{
-    AesGcmEncrypt,
-    AesGcmGeneratedNonce,
-};
 
 fn criterion_config() -> Criterion {
     Criterion::default()
         .sample_size(200)
         .measurement_time(Duration::from_secs(10))
 }
-
 
 fn aes_gcm_encrypt(c: &mut Criterion) {
     let key = [0u8; 32];
@@ -40,22 +30,15 @@ fn aes_gcm_encrypt(c: &mut Criterion) {
 
         group.throughput(Throughput::Bytes(size as u64));
 
-        group.bench_with_input(
-            BenchmarkId::new("encrypt_bytes", name),
-            &data,
-            |b, data| {
-                b.iter(|| {
-                    black_box(
-                        encryptor
-                            .encrypt_bytes(
-                                black_box(data),
-                                black_box(&key),
-                            )
-                            .unwrap(),
-                    );
-                });
-            },
-        );
+        group.bench_with_input(BenchmarkId::new("encrypt_bytes", name), &data, |b, data| {
+            b.iter(|| {
+                black_box(
+                    encryptor
+                        .encrypt_bytes(black_box(data), black_box(&key))
+                        .unwrap(),
+                );
+            });
+        });
     }
 
     group.finish();
