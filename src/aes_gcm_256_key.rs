@@ -1,3 +1,5 @@
+#![cfg(feature = "security")]
+
 use base64::{engine::general_purpose, Engine as _};
 use zeroize::Zeroizing;
 
