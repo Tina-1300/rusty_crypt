@@ -1,6 +1,6 @@
 #![cfg(feature = "security")]
 
-use base64::{engine::general_purpose, Engine as _};
+use base64::{Engine as _, engine::general_purpose};
 use zeroize::Zeroizing;
 
 use crate::error::CryptoError;
@@ -16,7 +16,6 @@ pub struct AesGcm256Key {
 }
 
 impl AesGcm256Key {
-
     /// Creates a new AES-256 key from raw bytes.
     ///
     /// The provided bytes must contain exactly 32 bytes.
@@ -25,7 +24,6 @@ impl AesGcm256Key {
             bytes: Zeroizing::new(bytes),
         }
     }
-
 
     /// Returns the raw AES key bytes.
     ///
@@ -38,7 +36,6 @@ impl AesGcm256Key {
     pub(crate) fn as_slice(&self) -> &[u8] {
         &self.bytes[..]
     }
-
 
     /// Encodes the AES-256 key into Base64.
     ///
@@ -54,7 +51,6 @@ impl AesGcm256Key {
         general_purpose::STANDARD.encode(&self.bytes[..])
     }
 
-
     /// Creates an AES-256 key from Base64.
     ///
     /// The decoded temporary buffer is automatically
@@ -65,27 +61,20 @@ impl AesGcm256Key {
     /// ```text
     /// 32 bytes
     /// ```
-    pub fn from_base64(
-        value: &str,
-    ) -> Result<Self, CryptoError> {
-
+    pub fn from_base64(value: &str) -> Result<Self, CryptoError> {
         let decoded = Zeroizing::new(
             general_purpose::STANDARD
                 .decode(value)
-                .map_err(CryptoError::InvalidBase64)?
+                .map_err(CryptoError::InvalidBase64)?,
         );
 
-
-        let bytes: [u8; 32] =
-            decoded
-                .as_slice()
-                .try_into()
-                .map_err(|_| CryptoError::InvalidKeySize)?;
-
+        let bytes: [u8; 32] = decoded
+            .as_slice()
+            .try_into()
+            .map_err(|_| CryptoError::InvalidKeySize)?;
 
         Ok(Self::new(bytes))
     }
-
 
     /// Returns the size of the AES key.
     ///
@@ -99,14 +88,8 @@ impl AesGcm256Key {
     }
 }
 
-
 impl std::fmt::Debug for AesGcm256Key {
-
-    fn fmt(
-        &self,
-        f: &mut std::fmt::Formatter<'_>,
-    ) -> std::fmt::Result {
-
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         write!(f, "AesGcm256Key([REDACTED])")
     }
 }
