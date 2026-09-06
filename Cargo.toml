@@ -1,0 +1,90 @@
+[package]
+name = "rusty_crypt"
+version = "0.0.0"
+edition = "2024"
+authors = ["Tina-1300"]
+description = "Rust library allowing for a very quick and simple implementation of AES-GCM encryption"
+license = "MIT"
+keywords = ["api", "cryptography", "aes-gcm", "rusty_crypt", "secure"]
+repository = "https://github.com/Tina-1300/rusty_crypt"
+rust-version = "1.98.1"
+
+# Files included in crates.io package
+include = [
+    "src/**/*.rs",
+    "tests/**/*.rs",
+    "Cargo.toml",
+    "Cargo.lock",
+    "README.md",
+    "LICENSE",
+]
+
+
+
+[dependencies]
+aes-gcm = "0.11.1"
+zeroize = "1.9.0"
+base64 = "0.23.0"
+thiserror = "2.0.19"
+getrandom = "0.4.3"
+subtle = "2"
+
+
+[dev-dependencies]
+criterion = "0.8.2"
+criterion-cycles-per-byte = "0.8.0"
+
+[[bench]]
+name = "aes_gcm_encrypt"
+harness = false
+
+[[bench]]
+name = "aes_gcm_decrypt"
+harness = false
+
+[[bench]]
+name = "aes_gcm"
+harness = false
+
+
+[profile.release]
+opt-level = 3           # Optimisation maximale des performances
+lto = "fat"             # Optimisation LLVM complète entre les crates
+codegen-units = 1       # Meilleure optimisation, compilation plus lente
+strip = "symbols"       # Supprime les symboles inutiles
+debug = false           # Pas d'informations debug dans le build final
+debug-assertions = false
+overflow-checks = false
+incremental = false
+
+
+[profile.bench]
+opt-level = 3
+lto = "fat"
+codegen-units = 1
+#strip = "symbols"
+#debug = false
+strip = false
+debug = true
+debug-assertions = false
+overflow-checks = false
+incremental = false
+
+
+
+[profile.dev]
+opt-level = 1
+debug = true
+debug-assertions = true
+overflow-checks = true
+incremental = true
+
+
+# cargo bench --bench aes_gcm_encrypt
+# cargo bench --bench aes_gcm_decrypt
+# cargo bench --bench aes_gcm
+
+
+# cargo flamegraph --bench aes_gcm_encrypt
+# cargo flamegraph --bench aes_gcm_decrypt
+# cargo flamegraph --bench aes_gcm

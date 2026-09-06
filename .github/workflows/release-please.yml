@@ -1,0 +1,107 @@
+name: Release Please
+
+on:
+  push:
+    branches:
+      - main
+
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+concurrency:
+  group: release-please
+  cancel-in-progress: false
+
+env:
+  CARGO_TERM_COLOR: always
+  CARGO_INCREMENTAL: 0
+
+jobs:
+  release-please:
+    name: Create Release
+    runs-on: ubuntu-24.04
+
+    outputs:
+      release_created: ${{ steps.release.outputs.release_created }}
+      tag_name: ${{ steps.release.outputs.tag_name }}
+      version: ${{ steps.release.outputs.version }}
+
+    steps:
+      - name: Run Release Please
+        id: release
+        uses: googleapis/release-please-action@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          config-file: release-please-config.json
+          manifest-file: .release-please-manifest.json
+
+  publish:
+    name: Publish to crates.io
+    needs: release-please
+    if: needs.release-please.outputs.release_created == 'true'
+
+    runs-on: ubuntu-24.04
+
+    timeout-minutes: 15
+
+    permissions:
+      contents: read
+
+    steps:
+      - name: Checkout released tag
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ needs.release-please.outputs.tag_name }}
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Setup Rust
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Cache Cargo
+        uses: Swatinem/rust-cache@v2
+        with:
+          cache-on-failure: true
+
+      - name: Display toolchain
+        run: |
+          rustc --version
+          cargo --version
+
+      - name: Verify release version
+        env:
+          EXPECTED_VERSION: ${{ needs.release-please.outputs.version }}
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          ACTUAL_VERSION="$(cargo metadata \
+            --no-deps \
+            --format-version 1 \
+            | python3 -c 'import json,sys; print(json.load(sys.stdin)["packages"][0]["version"])')"
+
+          echo "Expected version: ${EXPECTED_VERSION}"
+          echo "Cargo version:    ${ACTUAL_VERSION}"
+
+          if [ "${ACTUAL_VERSION}" != "${EXPECTED_VERSION}" ]; then
+            echo "::error::Cargo.toml version does not match the release version."
+            exit 1
+          fi
+
+      - name: Package crate
+        run: cargo package
+
+      - name: Verify package contents
+        run: cargo package --list
+
+      - name: Validate publication
+        run: cargo publish --dry-run
+
+      - name: Publish crate
+        run: cargo publish
+        env:
+          CARGO_REGISTRY_TOKEN: ${{ secrets.CARGO_REGISTRY_TOKEN }}
+
