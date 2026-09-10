@@ -26,7 +26,6 @@ fn aes_gcm_nonce_generation(c: &mut Criterion<CyclesPerByte>) {
             black_box(nonce);
         });
     });
-
 }
 
 criterion_group! {
