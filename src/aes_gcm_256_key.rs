@@ -100,7 +100,6 @@ impl TryFrom<&str> for AesGcm256Key {
     }
 }
 
-
 impl PartialEq for AesGcm256Key {
     #[inline]
     fn eq(&self, other: &Self) -> bool {

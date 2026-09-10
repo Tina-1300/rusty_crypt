@@ -215,7 +215,6 @@ mod tests {
         );
     }
 
-
     #[test]
     fn test_aes_gcm_256_key_partial_eq() {
         let key1 = AesGcm256Key::from_bytes([0x42u8; AesGcm256Key::SIZE]);
@@ -275,7 +274,4 @@ mod tests {
 
         assert_eq!(key1, key2, "Keys with identical key material must be equal");
     }
-
-
-
 }
