@@ -91,6 +91,13 @@ impl TryFrom<&[u8]> for AesGcm256Key {
     }
 }
 
+impl From<[u8; AesGcm256Key::SIZE]> for AesGcm256Key {
+    #[inline]
+    fn from(bytes: [u8; Self::SIZE]) -> Self {
+        Self::from_bytes(bytes)
+    }
+}
+
 impl TryFrom<&str> for AesGcm256Key {
     type Error = CryptoError;
 
