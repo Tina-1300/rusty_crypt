@@ -109,6 +109,13 @@ impl PartialEq for AesGcm256Key {
 
 impl Eq for AesGcm256Key {}
 
+impl Clone for AesGcm256Key {
+    #[inline]
+    fn clone(&self) -> Self {
+        Self::from_bytes(*self.bytes)
+    }
+}
+
 impl std::fmt::Debug for AesGcm256Key {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         f.debug_struct("AesGcm256Key")

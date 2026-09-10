@@ -274,4 +274,32 @@ mod tests {
 
         assert_eq!(key1, key2, "Keys with identical key material must be equal");
     }
+
+    #[test]
+    fn test_aes_gcm_256_key_clone_preserves_key_material() {
+        let key = AesGcm256Key::from_bytes([0x42u8; AesGcm256Key::SIZE]);
+
+        let cloned_key = key.clone();
+
+        assert_eq!(
+            key, cloned_key,
+            "Cloned key must contain the same key material"
+        );
+
+        assert!(
+            key.is_equal(&cloned_key),
+            "Cloned key must be equal to the original key"
+        );
+    }
+
+    #[test]
+    fn test_aes_gcm_256_key_clone_is_independent() {
+        let key = AesGcm256Key::from_bytes([0x42u8; AesGcm256Key::SIZE]);
+        let cloned_key = key.clone();
+        let different_key = AesGcm256Key::from_bytes([0x43u8; AesGcm256Key::SIZE]);
+
+        assert_eq!(key, cloned_key);
+        assert_ne!(cloned_key, different_key);
+        assert_ne!(key, different_key);
+    }
 }
