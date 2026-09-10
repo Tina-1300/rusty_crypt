@@ -46,6 +46,10 @@ harness = false
 name = "aes_gcm"
 harness = false
 
+[[bench]]
+name = "aes_gcm_key_generation"
+harness = false
+
 
 [profile.release]
 opt-level = 3           # Optimisation maximale des performances
