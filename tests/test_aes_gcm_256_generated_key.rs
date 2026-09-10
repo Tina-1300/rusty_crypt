@@ -214,4 +214,68 @@ mod tests {
             "Keys with different material must not be equal"
         );
     }
+
+
+    #[test]
+    fn test_aes_gcm_256_key_partial_eq() {
+        let key1 = AesGcm256Key::from_bytes([0x42u8; AesGcm256Key::SIZE]);
+        let key2 = AesGcm256Key::from_bytes([0x42u8; AesGcm256Key::SIZE]);
+        let key3 = AesGcm256Key::from_bytes([0x43u8; AesGcm256Key::SIZE]);
+
+        assert_eq!(key1, key2);
+        assert_ne!(key1, key3);
+    }
+
+    #[test]
+    fn test_aes_gcm_256_key_eq_is_reflexive_and_symmetric() {
+        let key1 = AesGcm256Key::from_bytes([0x42u8; AesGcm256Key::SIZE]);
+        let key2 = AesGcm256Key::from_bytes([0x42u8; AesGcm256Key::SIZE]);
+
+        assert_eq!(key1, key1);
+        assert_eq!(key1, key2);
+        assert_eq!(key2, key1);
+    }
+
+    #[test]
+    fn test_aes_gcm_256_key_eq_is_transitive() {
+        let key1 = AesGcm256Key::from_bytes([0x42u8; AesGcm256Key::SIZE]);
+        let key2 = AesGcm256Key::from_bytes([0x42u8; AesGcm256Key::SIZE]);
+        let key3 = AesGcm256Key::from_bytes([0x42u8; AesGcm256Key::SIZE]);
+
+        assert_eq!(key1, key2);
+        assert_eq!(key2, key3);
+        assert_eq!(key1, key3);
+    }
+
+    #[test]
+    fn test_aes_gcm_256_key_partial_eq_matches_constant_time_equality() {
+        let key1 = AesGcm256Key::from_bytes([0x42u8; AesGcm256Key::SIZE]);
+        let key2 = AesGcm256Key::from_bytes([0x42u8; AesGcm256Key::SIZE]);
+        let key3 = AesGcm256Key::from_bytes([0x43u8; AesGcm256Key::SIZE]);
+
+        assert_eq!(
+            key1 == key2,
+            key1.is_equal(&key2),
+            "PartialEq and is_equal must produce the same result"
+        );
+
+        assert_eq!(
+            key1 == key3,
+            key1.is_equal(&key3),
+            "PartialEq and is_equal must produce the same result"
+        );
+    }
+
+    #[test]
+    fn test_aes_gcm_256_key_eq_does_not_depend_on_object_identity() {
+        let bytes = [0xABu8; AesGcm256Key::SIZE];
+
+        let key1 = AesGcm256Key::from_bytes(bytes);
+        let key2 = AesGcm256Key::from_bytes(bytes);
+
+        assert_eq!(key1, key2, "Keys with identical key material must be equal");
+    }
+
+
+
 }

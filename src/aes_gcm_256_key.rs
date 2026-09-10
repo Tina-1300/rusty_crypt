@@ -100,6 +100,16 @@ impl TryFrom<&str> for AesGcm256Key {
     }
 }
 
+
+impl PartialEq for AesGcm256Key {
+    #[inline]
+    fn eq(&self, other: &Self) -> bool {
+        self.bytes.as_ref().ct_eq(other.bytes.as_ref()).into()
+    }
+}
+
+impl Eq for AesGcm256Key {}
+
 impl std::fmt::Debug for AesGcm256Key {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         f.debug_struct("AesGcm256Key")
