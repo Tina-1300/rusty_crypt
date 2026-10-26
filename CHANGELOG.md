@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.3.0](https://github.com/Tina-1300/rusty_crypt/compare/v0.2.1...v0.3.0) (2026-10-26)
+
+
+### ✨ Features
+
+* **crypto:** migrate AES-256-GCM tests to use aes-gcm-siv wrapper ([66d04ab](https://github.com/Tina-1300/rusty_crypt/commit/66d04abc243f5780732e6dac9b84a17855c63415))
+
 ## [0.2.1](https://github.com/Tina-1300/rusty_crypt/compare/v0.2.0...v0.2.1) (2026-10-26)
 
 
