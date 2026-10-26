@@ -1,4 +1,4 @@
-use aes_gcm::{Aes256Gcm, Key};
+use aes_gcm_siv::{Aes256GcmSiv, Key};
 use base64::Engine as _;
 use subtle::ConstantTimeEq;
 use zeroize::Zeroizing;
@@ -67,7 +67,7 @@ impl AesGcm256Key {
     /// This conversion does not copy the key material.
     #[allow(clippy::unnecessary_fallible_conversions)]
     #[inline]
-    pub(crate) fn as_key(&self) -> &Key<Aes256Gcm> {
+    pub(crate) fn as_key(&self) -> &Key<Aes256GcmSiv> {
         // `AesGcm256Key` is guaranteed to contain exactly 32 bytes,
         // which is exactly the size required by AES-256.
         self.as_bytes()
@@ -120,6 +120,13 @@ impl Clone for AesGcm256Key {
     #[inline]
     fn clone(&self) -> Self {
         Self::from_bytes(*self.bytes)
+    }
+}
+
+impl AsRef<[u8]> for AesGcm256Key {
+    #[inline]
+    fn as_ref(&self) -> &[u8] {
+        self.bytes.as_ref()
     }
 }
 

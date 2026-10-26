@@ -1,5 +1,5 @@
-use aes_gcm::aead::{Aead, KeyInit};
-use aes_gcm::{Aes256Gcm, Nonce};
+use aes_gcm_siv::aead::{Aead, KeyInit};
+use aes_gcm_siv::{Aes256GcmSiv, Nonce};
 use std::convert::TryFrom;
 
 use crate::error::CryptoError;
@@ -17,7 +17,7 @@ use super::aes_gcm_256_nonce::AesGcm256Nonce;
 /// encryption operation.
 pub struct AesGcm256 {
     key: AesGcm256Key,
-    cipher: Aes256Gcm,
+    cipher: Aes256GcmSiv,
     nonce_generator: AesGcmGeneratedNonce,
 }
 
@@ -28,7 +28,7 @@ impl AesGcm256 {
     /// subsequent encryption and decryption operations.
     #[inline]
     pub fn new(key: AesGcm256Key) -> Self {
-        let cipher = Aes256Gcm::new(key.as_key());
+        let cipher = Aes256GcmSiv::new(key.as_key());
 
         Self {
             key,

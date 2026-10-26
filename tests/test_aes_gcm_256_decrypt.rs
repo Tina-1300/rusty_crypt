@@ -4,12 +4,14 @@ mod tests {
 
     use rusty_crypt::{AesGcm256Key, AesGcm256Nonce, AesGcmDecrypt, CryptoError};
 
+    use rusty_crypt::{AesGcmEncrypt, AesGcmGeneratedNonce};
+
     const VALID_KEY_BASE64: &str = "JeAe64TzfRKY0f4Mfx4slwqE3dZwQAXKd7UPZ2JF2q0=";
 
     const WRONG_KEY_BASE64: &str = "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
 
     const ENCRYPTED_MESSAGE: &str =
-        "afRuT4pTzTXOhN8W::HUlMxpds+L3Vvy6PJlvdIQHkTvF/MjAgALYEBPADneIAkg==";
+        "QkJCQkJCQkJCQkJC::RJrhT8XcNnvj47tFxtJGvUNZZ+rwSCO+anY6NhJDqTHKlQ==";
 
     const EXPECTED_PLAINTEXT: &[u8] = b"Hello rusty_crypt!";
 
@@ -22,6 +24,39 @@ mod tests {
     }
 
     fn encrypted_parts() -> (AesGcm256Nonce, Vec<u8>) {
+        // cargo test -- --nocapture
+        //encrypted_parts_dynamic()
+
+        encrypted_parts_static()
+    }
+
+    #[allow(dead_code)]
+    fn encrypted_parts_dynamic() -> (AesGcm256Nonce, Vec<u8>) {
+        let key = valid_key();
+
+        let nonce_generator = AesGcmGeneratedNonce;
+
+        let encryptor =
+            AesGcmEncrypt::new(&nonce_generator, &key).expect("Encryptor should be created");
+
+        let (ciphertext, nonce) = encryptor
+            .encrypt_bytes(EXPECTED_PLAINTEXT)
+            .expect("Encryption via wrapper failed");
+
+        let nonce_base64 = general_purpose::STANDARD.encode(nonce.as_ref());
+        let ciphertext_base64 = general_purpose::STANDARD.encode(&ciphertext);
+        println!("\n>>> STATIC VALUE VIA YOUR WRAPPER :");
+        println!(
+            "const ENCRYPTED_MESSAGE: &str = \"{}::{}\";",
+            nonce_base64, ciphertext_base64
+        );
+        println!("---------------------------------------------------\n");
+
+        (nonce, ciphertext)
+    }
+
+    #[allow(dead_code)]
+    fn encrypted_parts_static() -> (AesGcm256Nonce, Vec<u8>) {
         let (nonce_base64, ciphertext_base64) = ENCRYPTED_MESSAGE
             .split_once("::")
             .expect("Encrypted value should contain ::");

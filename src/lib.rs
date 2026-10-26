@@ -1,6 +1,6 @@
-//! AES-256-GCM cryptographic primitives and utilities.
+//! AES-256-GCM-SIV cryptographic primitives and utilities.
 //!
-//! This module provides encryption and decryption using AES-256-GCM,
+//! This module provides encryption and decryption using AES-256-GCM-SIV,
 //! along with utilities for generating and managing encryption keys
 //! and nonces.
 //!
@@ -9,13 +9,13 @@
 //!
 //! # Main Types
 //!
-//! - [`AesGcm256`] provides high-level AES-256-GCM encryption and decryption.
+//! - [`AesGcm256`] provides high-level AES-256-GCM-SIV encryption and decryption.
 //! - [`AesGcmEncrypt`] provides encryption operations.
 //! - [`AesGcmDecrypt`] provides decryption operations.
 //! - [`AesGcm256Key`] represents an AES-256 encryption key.
-//! - [`AesGcm256Nonce`] represents an AES-GCM nonce.
+//! - [`AesGcm256Nonce`] represents an AES-GCM-SIV nonce.
 //! - [`AesGeneratedKey`] generates cryptographically secure AES-256 keys.
-//! - [`AesGcmGeneratedNonce`] generates AES-GCM nonces.
+//! - [`AesGcmGeneratedNonce`] generates AES-GCM-SIV nonces.
 //! - [`CryptoError`] represents errors that can occur during cryptographic operations.
 pub mod aes_gcm_256;
 pub mod aes_gcm_256_decrypt;

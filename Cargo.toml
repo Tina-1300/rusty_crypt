@@ -22,7 +22,8 @@ include = [
 
 
 [dependencies]
-aes-gcm = "0.11.1"
+aes-gcm-siv = "0.12.1"
+#aes-gcm = "0.11.1" # depreciat for the security of rusty_crypt 
 zeroize = "1.9.0"
 base64 = "0.23.0"
 thiserror = "2.0.19"

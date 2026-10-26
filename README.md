@@ -5,7 +5,7 @@
 ![Crates.io License](https://img.shields.io/crates/l/rusty_crypt?style=plastic)
 
 
-A simple and secure Rust library providing an easy-to-use interface for **AES-256-GCM authenticated encryption**.
+A simple and secure Rust library providing an easy-to-use interface for **AES-256-GCM-SIV authenticated encryption**.
 
 `rusty_crypt` provides high-level utilities to easily integrate modern symmetric encryption into Rust applications.
 
@@ -13,7 +13,7 @@ A simple and secure Rust library providing an easy-to-use interface for **AES-25
 
 ## Features
 
-- AES-256-GCM encryption and decryption
+- AES-256-GCM-SIV encryption and decryption
 - Secure key generation
 - Secure nonce generation
 - Binary data support
@@ -25,19 +25,20 @@ A simple and secure Rust library providing an easy-to-use interface for **AES-25
 ## Quick Start
 
 ```rust
-use rusty_crypt::{AesGcm256, AesGcm256Key};
+use rusty_crypt::{AesGcmEncrypt, AesGcmDecrypt, AesGcm256Key, AesGcmGeneratedNonce};
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
-
     let key = AesGcm256Key::from_bytes([0u8; AesGcm256Key::SIZE]);
+    let nonce_generator = AesGcmGeneratedNonce;
 
-    let cipher = AesGcm256::new(key);
+    let encryptor = AesGcmEncrypt::new(&nonce_generator, &key)?;
+    let decryptor = AesGcmDecrypt::new(&key)?;
 
     let data = b"Hello, rusty_crypt!";
 
-    let (ciphertext, nonce) = cipher.encrypt(data)?;
+    let (ciphertext, nonce) = encryptor.encrypt_bytes(data)?;
 
-    let decrypted = cipher.decrypt(&ciphertext, &nonce)?;
+    let decrypted = decryptor.decrypt_bytes(&ciphertext, &nonce)?;
 
     assert_eq!(data, decrypted.as_slice());
 
@@ -47,7 +48,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 
 
 Security
-rusty_crypt uses AES-256-GCM.
+rusty_crypt uses AES-256-GCM-SIV.
 
 - Key size: 32 bytes (256 bits)
 - Nonce size: 12 bytes (96 bits)
