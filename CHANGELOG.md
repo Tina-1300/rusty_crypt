@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.2.1](https://github.com/Tina-1300/rusty_crypt/compare/v0.2.0...v0.2.1) (2026-10-26)
+
+
+### 🐛 Bug Fixes
+
+* update ctutils to resolve vulnerability ([93cd5d6](https://github.com/Tina-1300/rusty_crypt/commit/93cd5d6ec85fd54215e82292ae86d6fb21c26356))
+
 ## [0.2.0](https://github.com/Tina-1300/rusty_crypt/compare/v0.1.0...v0.2.0) (2026-09-10)
 
 
