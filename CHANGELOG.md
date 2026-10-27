@@ -1,5 +1,22 @@
 # Changelog
 
+## [0.4.0](https://github.com/Tina-1300/rusty_crypt/compare/v0.3.0...v0.4.0) (2026-10-27)
+
+
+### ✨ Features
+
+* add helper macros and update English documentation ([3ba292c](https://github.com/Tina-1300/rusty_crypt/commit/3ba292cdc01d831dc2b334d1f7691c8ed7f2b59f))
+
+
+### ♻️ Refactoring
+
+* **cipher:** rename AesGcm256 to AesGcmSiv256 ([bc10182](https://github.com/Tina-1300/rusty_crypt/commit/bc10182304813fa0f0939db90c7c28d9ff9a201d))
+* **decrypt:** rename AesGcmDecrypt to AesGcmSivDecrypt ([0baff56](https://github.com/Tina-1300/rusty_crypt/commit/0baff56c53cf8514bcb92a5d034a7f4086f8e2a9))
+* **encrypt:** rename AesGcmEncrypt to AesGcmSivEncrypt ([012bbd8](https://github.com/Tina-1300/rusty_crypt/commit/012bbd80af08859c3b8e141f2d5b36682aa73ed7))
+* **keys:** rename AesGcm256Key to AesGcmSiv256Key ([3f83eea](https://github.com/Tina-1300/rusty_crypt/commit/3f83eea7da44716450be87559c8c52d9e96029a3))
+* **nonces:** rename AesGcm256Nonce to AesGcmSiv256Nonce ([54ef1cb](https://github.com/Tina-1300/rusty_crypt/commit/54ef1cbd193901d08bf91dd29fbeb827c57feff6))
+* **nonces:** rename AesGcmGeneratedNonce to AesGcmSivGeneratedNonce ([1f09f13](https://github.com/Tina-1300/rusty_crypt/commit/1f09f131e805ecd890f0dd1d9655adddad0982c2))
+
 ## [0.3.0](https://github.com/Tina-1300/rusty_crypt/compare/v0.2.1...v0.3.0) (2026-10-26)
 
 
