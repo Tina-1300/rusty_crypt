@@ -9,12 +9,12 @@ use super::aes_gcm_siv_256_key::AesGcmSiv256Key;
 use super::aes_gcm_siv_256_nonce::AesGcmSiv256Nonce;
 
 /// AES-256-GCM encryptor.
-pub struct AesGcmEncrypt<'a> {
+pub struct AesGcmSivEncrypt<'a> {
     cipher: Aes256GcmSiv,
     nonce_generator: &'a AesGcmGeneratedNonce,
 }
 
-impl<'a> AesGcmEncrypt<'a> {
+impl<'a> AesGcmSivEncrypt<'a> {
     /// Creates a new AES-256-GCM encryptor.
     pub fn new(
         nonce_generator: &'a AesGcmGeneratedNonce,

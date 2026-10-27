@@ -5,7 +5,7 @@ use criterion::{BenchmarkId, Criterion, Throughput, criterion_group, criterion_m
 
 use criterion_cycles_per_byte::CyclesPerByte;
 
-use rusty_crypt::{AesGcmEncrypt, AesGcmGeneratedNonce, AesGcmSiv256Key};
+use rusty_crypt::{AesGcmGeneratedNonce, AesGcmSiv256Key, AesGcmSivEncrypt};
 
 fn criterion_config() -> Criterion<CyclesPerByte> {
     Criterion::default()
@@ -21,7 +21,7 @@ fn aes_gcm_encrypt(c: &mut Criterion<CyclesPerByte>) {
     let nonce_generator = AesGcmGeneratedNonce;
 
     let encryptor =
-        AesGcmEncrypt::new(&nonce_generator, &key).expect("Encryptor creation should succeed");
+        AesGcmSivEncrypt::new(&nonce_generator, &key).expect("Encryptor creation should succeed");
 
     let mut group = c.benchmark_group("AES-256-GCM Encrypt");
 

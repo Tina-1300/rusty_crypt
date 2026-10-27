@@ -1,15 +1,15 @@
 #[cfg(test)]
 mod tests {
     use rusty_crypt::{
-        AesGcmEncrypt, AesGcmGeneratedNonce, AesGcmSiv256Key, AesGcmSiv256Nonce, AesGcmSivDecrypt,
-        AesGeneratedKey, CryptoError,
+        AesGcmGeneratedNonce, AesGcmSiv256Key, AesGcmSiv256Nonce, AesGcmSivDecrypt,
+        AesGcmSivEncrypt, AesGeneratedKey, CryptoError,
     };
 
     fn create_encryptor<'a>(
         key: &'a AesGcmSiv256Key,
         nonce_generator: &'a AesGcmGeneratedNonce,
-    ) -> AesGcmEncrypt<'a> {
-        AesGcmEncrypt::new(nonce_generator, key).expect("Encryptor should be created")
+    ) -> AesGcmSivEncrypt<'a> {
+        AesGcmSivEncrypt::new(nonce_generator, key).expect("Encryptor should be created")
     }
 
     fn create_decryptor(key: &rusty_crypt::AesGcmSiv256Key) -> AesGcmSivDecrypt {

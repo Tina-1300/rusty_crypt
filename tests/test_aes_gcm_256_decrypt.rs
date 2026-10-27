@@ -4,7 +4,7 @@ mod tests {
 
     use rusty_crypt::{AesGcmSiv256Key, AesGcmSiv256Nonce, AesGcmSivDecrypt, CryptoError};
 
-    use rusty_crypt::{AesGcmEncrypt, AesGcmGeneratedNonce};
+    use rusty_crypt::{AesGcmGeneratedNonce, AesGcmSivEncrypt};
 
     const VALID_KEY_BASE64: &str = "JeAe64TzfRKY0f4Mfx4slwqE3dZwQAXKd7UPZ2JF2q0=";
 
@@ -37,7 +37,7 @@ mod tests {
         let nonce_generator = AesGcmGeneratedNonce;
 
         let encryptor =
-            AesGcmEncrypt::new(&nonce_generator, &key).expect("Encryptor should be created");
+            AesGcmSivEncrypt::new(&nonce_generator, &key).expect("Encryptor should be created");
 
         let (ciphertext, nonce) = encryptor
             .encrypt_bytes(EXPECTED_PLAINTEXT)

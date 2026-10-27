@@ -10,7 +10,7 @@
 //! # Main Types
 //!
 //! - [`AesGcm256`] provides high-level AES-256-GCM-SIV encryption and decryption.
-//! - [`AesGcmEncrypt`] provides encryption operations.
+//! - [`AesGcmSivEncrypt`] provides encryption operations.
 //! - [`AesGcmSivDecrypt`] provides decryption operations.
 //! - [`AesGcmSiv256Key`] represents an AES-256 encryption key.
 //! - [`AesGcmSiv256Nonce`] represents an AES-GCM-SIV nonce.
@@ -18,19 +18,19 @@
 //! - [`AesGcmGeneratedNonce`] generates AES-GCM-SIV nonces.
 //! - [`CryptoError`] represents errors that can occur during cryptographic operations.
 pub mod aes_gcm_256;
-pub mod aes_gcm_256_encrypt;
 pub mod aes_gcm_256_generated_key;
 pub mod aes_gcm_256_generated_nonce;
 pub mod aes_gcm_siv_256_decrypt;
+pub mod aes_gcm_siv_256_encrypt;
 pub mod aes_gcm_siv_256_key;
 pub mod aes_gcm_siv_256_nonce;
 pub mod error;
 
 pub use self::aes_gcm_256::AesGcm256;
-pub use self::aes_gcm_256_encrypt::AesGcmEncrypt;
 pub use self::aes_gcm_256_generated_key::AesGeneratedKey;
 pub use self::aes_gcm_256_generated_nonce::AesGcmGeneratedNonce;
 pub use self::aes_gcm_siv_256_decrypt::AesGcmSivDecrypt;
+pub use self::aes_gcm_siv_256_encrypt::AesGcmSivEncrypt;
 pub use self::aes_gcm_siv_256_key::AesGcmSiv256Key;
 pub use self::aes_gcm_siv_256_nonce::AesGcmSiv256Nonce;
 pub use self::error::CryptoError;
