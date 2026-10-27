@@ -2,7 +2,7 @@
 mod tests {
     use base64::{Engine as _, engine::general_purpose};
 
-    use rusty_crypt::{AesGcmDecrypt, AesGcmSiv256Key, AesGcmSiv256Nonce, CryptoError};
+    use rusty_crypt::{AesGcmSiv256Key, AesGcmSiv256Nonce, AesGcmSivDecrypt, CryptoError};
 
     use rusty_crypt::{AesGcmEncrypt, AesGcmGeneratedNonce};
 
@@ -78,7 +78,7 @@ mod tests {
     #[test]
     fn test_aes_gcm_256_decrypt_valid_ciphertext() {
         let key = valid_key();
-        let decryptor = AesGcmDecrypt::new(&key).expect("Decryptor should be created");
+        let decryptor = AesGcmSivDecrypt::new(&key).expect("Decryptor should be created");
 
         let (nonce, ciphertext) = encrypted_parts();
 
@@ -95,7 +95,7 @@ mod tests {
     #[test]
     fn test_aes_gcm_256_decrypt_wrong_key() {
         let key = wrong_key();
-        let decryptor = AesGcmDecrypt::new(&key).expect("Decryptor should be created");
+        let decryptor = AesGcmSivDecrypt::new(&key).expect("Decryptor should be created");
 
         let (nonce, ciphertext) = encrypted_parts();
 
@@ -110,7 +110,7 @@ mod tests {
     #[test]
     fn test_aes_gcm_256_decrypt_invalid_ciphertext() {
         let key = valid_key();
-        let decryptor = AesGcmDecrypt::new(&key).expect("Decryptor should be created");
+        let decryptor = AesGcmSivDecrypt::new(&key).expect("Decryptor should be created");
 
         let ciphertext = [0u8; 15];
         let nonce = AesGcmSiv256Nonce::from_bytes([0u8; AesGcmSiv256Nonce::SIZE]);
@@ -126,7 +126,7 @@ mod tests {
     #[test]
     fn test_aes_gcm_256_decrypt_invalid_ciphertext_authentication() {
         let key = valid_key();
-        let decryptor = AesGcmDecrypt::new(&key).expect("Decryptor should be created");
+        let decryptor = AesGcmSivDecrypt::new(&key).expect("Decryptor should be created");
 
         let ciphertext = [0u8; 16];
         let nonce = AesGcmSiv256Nonce::from_bytes([0u8; AesGcmSiv256Nonce::SIZE]);
@@ -142,7 +142,7 @@ mod tests {
     #[test]
     fn test_aes_gcm_256_decrypt_empty_ciphertext() {
         let key = valid_key();
-        let decryptor = AesGcmDecrypt::new(&key).expect("Decryptor should be created");
+        let decryptor = AesGcmSivDecrypt::new(&key).expect("Decryptor should be created");
 
         let ciphertext: [u8; 0] = [];
         let nonce = AesGcmSiv256Nonce::from_bytes([0u8; AesGcmSiv256Nonce::SIZE]);
@@ -256,7 +256,7 @@ mod tests {
     #[test]
     fn test_aes_gcm_256_decrypt_with_modified_ciphertext() {
         let key = valid_key();
-        let decryptor = AesGcmDecrypt::new(&key).expect("Decryptor should be created");
+        let decryptor = AesGcmSivDecrypt::new(&key).expect("Decryptor should be created");
 
         let (nonce, mut ciphertext) = encrypted_parts();
 
@@ -274,7 +274,7 @@ mod tests {
     #[test]
     fn test_aes_gcm_256_decrypt_with_modified_nonce() {
         let key = valid_key();
-        let decryptor = AesGcmDecrypt::new(&key).expect("Decryptor should be created");
+        let decryptor = AesGcmSivDecrypt::new(&key).expect("Decryptor should be created");
 
         let (nonce, ciphertext) = encrypted_parts();
 

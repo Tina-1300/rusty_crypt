@@ -8,11 +8,11 @@ use super::aes_gcm_siv_256_key::AesGcmSiv256Key;
 use super::aes_gcm_siv_256_nonce::AesGcmSiv256Nonce;
 
 /// AES-256-GCM decryptor.
-pub struct AesGcmDecrypt {
+pub struct AesGcmSivDecrypt {
     cipher: Aes256GcmSiv,
 }
 
-impl AesGcmDecrypt {
+impl AesGcmSivDecrypt {
     /// Creates a new AES-256-GCM decryptor from the given key.
     pub fn new(key: &AesGcmSiv256Key) -> Result<Self, CryptoError> {
         let cipher = Aes256GcmSiv::new_from_slice(key.as_bytes())

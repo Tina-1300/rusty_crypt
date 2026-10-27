@@ -1,7 +1,7 @@
 #[cfg(test)]
 mod tests {
     use rusty_crypt::{
-        AesGcmDecrypt, AesGcmEncrypt, AesGcmGeneratedNonce, AesGcmSiv256Nonce, AesGeneratedKey,
+        AesGcmEncrypt, AesGcmGeneratedNonce, AesGcmSiv256Nonce, AesGcmSivDecrypt, AesGeneratedKey,
     };
 
     #[test]
@@ -17,7 +17,7 @@ mod tests {
         let encryptor =
             AesGcmEncrypt::new(&nonce_generator, &key).expect("Encryptor creation should succeed");
 
-        let decryptor = AesGcmDecrypt::new(&key).expect("Decryptor creation should succeed");
+        let decryptor = AesGcmSivDecrypt::new(&key).expect("Decryptor creation should succeed");
 
         let (ciphertext, nonce) = encryptor
             .encrypt_bytes(plaintext)
@@ -69,7 +69,7 @@ mod tests {
         let encryptor =
             AesGcmEncrypt::new(&nonce_generator, &key).expect("Encryptor creation should succeed");
 
-        let decryptor = AesGcmDecrypt::new(&key).expect("Decryptor creation should succeed");
+        let decryptor = AesGcmSivDecrypt::new(&key).expect("Decryptor creation should succeed");
 
         let (ciphertext, nonce) = encryptor
             .encrypt_bytes(plaintext)
