@@ -9,11 +9,11 @@ use crate::error::CryptoError;
 /// For AES-GCM, the recommended nonce size is 96 bits (12 bytes).
 /// A nonce MUST NOT be reused with the same key.
 #[derive(Clone, Copy, PartialEq, Eq, Hash)]
-pub struct AesGcm256Nonce {
+pub struct AesGcmSiv256Nonce {
     bytes: [u8; Self::SIZE],
 }
 
-impl AesGcm256Nonce {
+impl AesGcmSiv256Nonce {
     /// AES-GCM nonce size in bytes.
     pub const SIZE: usize = 12;
 
@@ -61,7 +61,7 @@ impl AesGcm256Nonce {
     }
 }
 
-impl TryFrom<&[u8]> for AesGcm256Nonce {
+impl TryFrom<&[u8]> for AesGcmSiv256Nonce {
     type Error = CryptoError;
 
     #[inline]
@@ -70,21 +70,21 @@ impl TryFrom<&[u8]> for AesGcm256Nonce {
     }
 }
 
-impl From<[u8; AesGcm256Nonce::SIZE]> for AesGcm256Nonce {
+impl From<[u8; AesGcmSiv256Nonce::SIZE]> for AesGcmSiv256Nonce {
     #[inline]
     fn from(bytes: [u8; Self::SIZE]) -> Self {
         Self::from_bytes(bytes)
     }
 }
 
-impl AsRef<[u8]> for AesGcm256Nonce {
+impl AsRef<[u8]> for AesGcmSiv256Nonce {
     #[inline]
     fn as_ref(&self) -> &[u8] {
         &self.bytes
     }
 }
 
-impl std::fmt::Debug for AesGcm256Nonce {
+impl std::fmt::Debug for AesGcmSiv256Nonce {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         write!(f, "AesGcm256Nonce({:02x?})", self.bytes)
     }

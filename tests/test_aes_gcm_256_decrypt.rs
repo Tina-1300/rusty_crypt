@@ -2,7 +2,7 @@
 mod tests {
     use base64::{Engine as _, engine::general_purpose};
 
-    use rusty_crypt::{AesGcm256Nonce, AesGcmDecrypt, AesGcmSiv256Key, CryptoError};
+    use rusty_crypt::{AesGcmDecrypt, AesGcmSiv256Key, AesGcmSiv256Nonce, CryptoError};
 
     use rusty_crypt::{AesGcmEncrypt, AesGcmGeneratedNonce};
 
@@ -23,7 +23,7 @@ mod tests {
         AesGcmSiv256Key::from_base64(WRONG_KEY_BASE64).expect("Test key should be valid")
     }
 
-    fn encrypted_parts() -> (AesGcm256Nonce, Vec<u8>) {
+    fn encrypted_parts() -> (AesGcmSiv256Nonce, Vec<u8>) {
         // cargo test -- --nocapture
         //encrypted_parts_dynamic()
 
@@ -31,7 +31,7 @@ mod tests {
     }
 
     #[allow(dead_code)]
-    fn encrypted_parts_dynamic() -> (AesGcm256Nonce, Vec<u8>) {
+    fn encrypted_parts_dynamic() -> (AesGcmSiv256Nonce, Vec<u8>) {
         let key = valid_key();
 
         let nonce_generator = AesGcmGeneratedNonce;
@@ -56,7 +56,7 @@ mod tests {
     }
 
     #[allow(dead_code)]
-    fn encrypted_parts_static() -> (AesGcm256Nonce, Vec<u8>) {
+    fn encrypted_parts_static() -> (AesGcmSiv256Nonce, Vec<u8>) {
         let (nonce_base64, ciphertext_base64) = ENCRYPTED_MESSAGE
             .split_once("::")
             .expect("Encrypted value should contain ::");
@@ -65,7 +65,7 @@ mod tests {
             .decode(nonce_base64)
             .expect("Nonce should be valid Base64");
 
-        let nonce = AesGcm256Nonce::try_from_bytes(&nonce_bytes)
+        let nonce = AesGcmSiv256Nonce::try_from_bytes(&nonce_bytes)
             .expect("Nonce should contain exactly 12 bytes");
 
         let ciphertext = general_purpose::STANDARD
@@ -113,7 +113,7 @@ mod tests {
         let decryptor = AesGcmDecrypt::new(&key).expect("Decryptor should be created");
 
         let ciphertext = [0u8; 15];
-        let nonce = AesGcm256Nonce::from_bytes([0u8; AesGcm256Nonce::SIZE]);
+        let nonce = AesGcmSiv256Nonce::from_bytes([0u8; AesGcmSiv256Nonce::SIZE]);
 
         let result = decryptor.decrypt_bytes(&ciphertext, &nonce);
 
@@ -129,7 +129,7 @@ mod tests {
         let decryptor = AesGcmDecrypt::new(&key).expect("Decryptor should be created");
 
         let ciphertext = [0u8; 16];
-        let nonce = AesGcm256Nonce::from_bytes([0u8; AesGcm256Nonce::SIZE]);
+        let nonce = AesGcmSiv256Nonce::from_bytes([0u8; AesGcmSiv256Nonce::SIZE]);
 
         let result = decryptor.decrypt_bytes(&ciphertext, &nonce);
 
@@ -145,7 +145,7 @@ mod tests {
         let decryptor = AesGcmDecrypt::new(&key).expect("Decryptor should be created");
 
         let ciphertext: [u8; 0] = [];
-        let nonce = AesGcm256Nonce::from_bytes([0u8; AesGcm256Nonce::SIZE]);
+        let nonce = AesGcmSiv256Nonce::from_bytes([0u8; AesGcmSiv256Nonce::SIZE]);
 
         let result = decryptor.decrypt_bytes(&ciphertext, &nonce);
 
@@ -157,7 +157,7 @@ mod tests {
 
     #[test]
     fn test_aes_gcm_256_invalid_nonce_size() {
-        let result = AesGcm256Nonce::try_from_bytes(&[0u8; AesGcm256Nonce::SIZE - 1]);
+        let result = AesGcmSiv256Nonce::try_from_bytes(&[0u8; AesGcmSiv256Nonce::SIZE - 1]);
 
         assert!(
             matches!(result, Err(CryptoError::InvalidNonceSize)),
@@ -167,13 +167,13 @@ mod tests {
 
     #[test]
     fn test_aes_gcm_256_nonce_roundtrip() {
-        let bytes = [0x42u8; AesGcm256Nonce::SIZE];
+        let bytes = [0x42u8; AesGcmSiv256Nonce::SIZE];
 
-        let nonce = AesGcm256Nonce::from_bytes(bytes);
+        let nonce = AesGcmSiv256Nonce::from_bytes(bytes);
 
         assert_eq!(
             nonce.size(),
-            AesGcm256Nonce::SIZE,
+            AesGcmSiv256Nonce::SIZE,
             "Nonce size should be 12 bytes"
         );
 
@@ -282,7 +282,7 @@ mod tests {
 
         nonce_bytes[0] ^= 0x01;
 
-        let modified_nonce = AesGcm256Nonce::from_bytes(nonce_bytes);
+        let modified_nonce = AesGcmSiv256Nonce::from_bytes(nonce_bytes);
 
         let result = decryptor.decrypt_bytes(&ciphertext, &modified_nonce);
 

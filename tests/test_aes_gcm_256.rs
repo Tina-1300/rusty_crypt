@@ -1,6 +1,6 @@
 #[cfg(test)]
 mod tests {
-    use rusty_crypt::{AesGcm256, AesGcm256Nonce, AesGcmSiv256Key, CryptoError};
+    use rusty_crypt::{AesGcm256, AesGcmSiv256Key, AesGcmSiv256Nonce, CryptoError};
 
     fn test_key() -> AesGcmSiv256Key {
         AesGcmSiv256Key::from_bytes([0x42; AesGcmSiv256Key::SIZE])
@@ -20,7 +20,7 @@ mod tests {
 
         assert_eq!(
             nonce.size(),
-            AesGcm256Nonce::SIZE,
+            AesGcmSiv256Nonce::SIZE,
             "Nonce should have the AES-GCM nonce size"
         );
 
@@ -144,7 +144,7 @@ mod tests {
         let mut nonce_bytes = nonce.into_bytes();
         nonce_bytes[0] ^= 0x01;
 
-        let tampered_nonce = AesGcm256Nonce::from_bytes(nonce_bytes);
+        let tampered_nonce = AesGcmSiv256Nonce::from_bytes(nonce_bytes);
 
         let result = aes.decrypt(&ciphertext, &tampered_nonce);
 
@@ -157,7 +157,7 @@ mod tests {
     #[test]
     fn test_aes_gcm_256_invalid_ciphertext_fails() {
         let aes = AesGcm256::new(test_key());
-        let nonce = AesGcm256Nonce::from_bytes([0u8; AesGcm256Nonce::SIZE]);
+        let nonce = AesGcmSiv256Nonce::from_bytes([0u8; AesGcmSiv256Nonce::SIZE]);
 
         let result = aes.decrypt(&[0u8; 15], &nonce);
 

@@ -5,8 +5,8 @@ use std::convert::TryFrom;
 use crate::error::CryptoError;
 
 use super::aes_gcm_256_generated_nonce::AesGcmGeneratedNonce;
-use super::aes_gcm_256_nonce::AesGcm256Nonce;
 use super::aes_gcm_siv_256_key::AesGcmSiv256Key;
+use super::aes_gcm_siv_256_nonce::AesGcmSiv256Nonce;
 
 /// AES-256-GCM encryptor.
 pub struct AesGcmEncrypt<'a> {
@@ -38,7 +38,7 @@ impl<'a> AesGcmEncrypt<'a> {
     pub fn encrypt_bytes(
         &self,
         plaintext: &[u8],
-    ) -> Result<(Vec<u8>, AesGcm256Nonce), CryptoError> {
+    ) -> Result<(Vec<u8>, AesGcmSiv256Nonce), CryptoError> {
         let nonce = self.nonce_generator.generate_nonce()?;
 
         let nonce_bytes = *nonce.as_bytes();

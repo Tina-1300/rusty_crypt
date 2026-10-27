@@ -1,7 +1,7 @@
 #[cfg(test)]
 mod tests {
     use rusty_crypt::{
-        AesGcm256Nonce, AesGcmDecrypt, AesGcmEncrypt, AesGcmGeneratedNonce, AesGeneratedKey,
+        AesGcmDecrypt, AesGcmEncrypt, AesGcmGeneratedNonce, AesGcmSiv256Nonce, AesGeneratedKey,
     };
 
     #[test]
@@ -30,13 +30,13 @@ mod tests {
 
         assert_eq!(
             nonce.size(),
-            AesGcm256Nonce::SIZE,
+            AesGcmSiv256Nonce::SIZE,
             "Nonce should have the AES-GCM nonce size"
         );
 
         assert_eq!(
             nonce.as_slice().len(),
-            AesGcm256Nonce::SIZE,
+            AesGcmSiv256Nonce::SIZE,
             "Nonce should contain exactly 12 bytes"
         );
 
@@ -83,7 +83,7 @@ mod tests {
 
         assert_eq!(
             nonce.size(),
-            AesGcm256Nonce::SIZE,
+            AesGcmSiv256Nonce::SIZE,
             "Nonce should have the AES-GCM nonce size"
         );
 

@@ -4,8 +4,8 @@ use std::convert::TryFrom;
 
 use crate::error::CryptoError;
 
-use super::aes_gcm_256_nonce::AesGcm256Nonce;
 use super::aes_gcm_siv_256_key::AesGcmSiv256Key;
+use super::aes_gcm_siv_256_nonce::AesGcmSiv256Nonce;
 
 /// AES-256-GCM decryptor.
 pub struct AesGcmDecrypt {
@@ -29,7 +29,7 @@ impl AesGcmDecrypt {
     pub fn decrypt_bytes(
         &self,
         ciphertext: &[u8],
-        nonce: &AesGcm256Nonce,
+        nonce: &AesGcmSiv256Nonce,
     ) -> Result<Vec<u8>, CryptoError> {
         // AES-GCM requires a 16-byte authentication tag.
         if ciphertext.len() < 16 {

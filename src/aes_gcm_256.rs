@@ -5,8 +5,8 @@ use std::convert::TryFrom;
 use crate::error::CryptoError;
 
 use super::aes_gcm_256_generated_nonce::AesGcmGeneratedNonce;
-use super::aes_gcm_256_nonce::AesGcm256Nonce;
 use super::aes_gcm_siv_256_key::AesGcmSiv256Key;
+use super::aes_gcm_siv_256_nonce::AesGcmSiv256Nonce;
 
 /// High-level AES-256-GCM cipher.
 ///
@@ -45,7 +45,7 @@ impl AesGcm256 {
     /// Returns the ciphertext, including the authentication tag,
     /// together with the nonce required for decryption.
     #[inline]
-    pub fn encrypt(&self, plaintext: &[u8]) -> Result<(Vec<u8>, AesGcm256Nonce), CryptoError> {
+    pub fn encrypt(&self, plaintext: &[u8]) -> Result<(Vec<u8>, AesGcmSiv256Nonce), CryptoError> {
         let nonce = self.nonce_generator.generate_nonce()?;
 
         let nonce_ref = Nonce::try_from(nonce.as_bytes().as_slice())
@@ -68,7 +68,7 @@ impl AesGcm256 {
     pub fn decrypt(
         &self,
         ciphertext: &[u8],
-        nonce: &AesGcm256Nonce,
+        nonce: &AesGcmSiv256Nonce,
     ) -> Result<Vec<u8>, CryptoError> {
         if ciphertext.len() < 16 {
             return Err(CryptoError::InvalidCiphertext);
