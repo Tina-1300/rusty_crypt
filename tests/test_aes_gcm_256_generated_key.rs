@@ -10,7 +10,11 @@ mod tests {
             .generate_key()
             .expect("Key generation should succeed");
 
-        assert_eq!(AesGcmSiv256Key::SIZE, 32, "AES-256 key size must be 32 bytes");
+        assert_eq!(
+            AesGcmSiv256Key::SIZE,
+            32,
+            "AES-256 key size must be 32 bytes"
+        );
 
         assert_eq!(
             key.size(),
@@ -136,7 +140,8 @@ mod tests {
 
         let encoded = general_purpose::STANDARD.encode(bytes);
 
-        let key = AesGcmSiv256Key::from_base64(&encoded).expect("Valid Base64 key should be accepted");
+        let key =
+            AesGcmSiv256Key::from_base64(&encoded).expect("Valid Base64 key should be accepted");
 
         let expected = AesGcmSiv256Key::from_bytes(bytes);
 

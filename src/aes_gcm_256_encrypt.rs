@@ -5,8 +5,8 @@ use std::convert::TryFrom;
 use crate::error::CryptoError;
 
 use super::aes_gcm_256_generated_nonce::AesGcmGeneratedNonce;
-use super::aes_gcm_siv_256_key::AesGcmSiv256Key;
 use super::aes_gcm_256_nonce::AesGcm256Nonce;
+use super::aes_gcm_siv_256_key::AesGcmSiv256Key;
 
 /// AES-256-GCM encryptor.
 pub struct AesGcmEncrypt<'a> {

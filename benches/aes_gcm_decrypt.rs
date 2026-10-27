@@ -5,7 +5,7 @@ use criterion::{BenchmarkId, Criterion, Throughput, criterion_group, criterion_m
 
 use criterion_cycles_per_byte::CyclesPerByte;
 
-use rusty_crypt::{AesGcmSiv256Key, AesGcmDecrypt, AesGcmEncrypt, AesGcmGeneratedNonce};
+use rusty_crypt::{AesGcmDecrypt, AesGcmEncrypt, AesGcmGeneratedNonce, AesGcmSiv256Key};
 
 fn criterion_config() -> Criterion<CyclesPerByte> {
     Criterion::default()

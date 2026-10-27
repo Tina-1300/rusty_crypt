@@ -1,7 +1,8 @@
 #[cfg(test)]
 mod tests {
     use rusty_crypt::{
-        AesGcm256Nonce, AesGcmDecrypt, AesGcmEncrypt, AesGcmGeneratedNonce, AesGcmSiv256Key, AesGeneratedKey, CryptoError,
+        AesGcm256Nonce, AesGcmDecrypt, AesGcmEncrypt, AesGcmGeneratedNonce, AesGcmSiv256Key,
+        AesGeneratedKey, CryptoError,
     };
 
     fn create_encryptor<'a>(

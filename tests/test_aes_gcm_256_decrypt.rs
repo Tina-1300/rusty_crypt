@@ -2,7 +2,7 @@
 mod tests {
     use base64::{Engine as _, engine::general_purpose};
 
-    use rusty_crypt::{AesGcmSiv256Key, AesGcm256Nonce, AesGcmDecrypt, CryptoError};
+    use rusty_crypt::{AesGcm256Nonce, AesGcmDecrypt, AesGcmSiv256Key, CryptoError};
 
     use rusty_crypt::{AesGcmEncrypt, AesGcmGeneratedNonce};
 

@@ -1,6 +1,6 @@
 #[cfg(test)]
 mod tests {
-    use rusty_crypt::{AesGcm256, AesGcmSiv256Key, AesGcm256Nonce, CryptoError};
+    use rusty_crypt::{AesGcm256, AesGcm256Nonce, AesGcmSiv256Key, CryptoError};
 
     fn test_key() -> AesGcmSiv256Key {
         AesGcmSiv256Key::from_bytes([0x42; AesGcmSiv256Key::SIZE])
