@@ -1,6 +1,16 @@
 use crate::{aes_gcm_siv_256_nonce::AesGcmSiv256Nonce, error::CryptoError};
 
 /// Generates cryptographically secure AES-GCM nonces.
+///
+/// # Example
+/// ```rust
+/// use rusty_crypt::AesGcmSivGeneratedNonce;
+///
+/// let generator = AesGcmSivGeneratedNonce;
+/// let nonce = generator.generate_nonce().unwrap();
+///
+/// assert_eq!(nonce.size(), 12);
+/// ```
 pub struct AesGcmSivGeneratedNonce;
 
 impl AesGcmSivGeneratedNonce {

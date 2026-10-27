@@ -15,6 +15,20 @@ use super::aes_gcm_siv_256_nonce::AesGcmSiv256Nonce;
 ///
 /// A fresh cryptographically secure nonce is generated for every
 /// encryption operation.
+///
+/// # Example
+/// ```rust
+/// use rusty_crypt::{AesGcmSiv256, AesGeneratedKey, quick_encrypt, quick_decrypt};
+///
+/// let key = AesGeneratedKey.generate_key().unwrap();
+/// let cipher = AesGcmSiv256::new(key.clone());
+///
+/// // Encrypting via the struct or via the quick_encrypt! macro
+/// let (ciphertext, nonce) = cipher.encrypt(b"Secret message").unwrap();
+/// let plaintext = cipher.decrypt(&ciphertext, &nonce).unwrap();
+///
+/// assert_eq!(plaintext, b"Secret message");
+/// ```
 pub struct AesGcmSiv256 {
     key: AesGcmSiv256Key,
     cipher: Aes256GcmSiv,

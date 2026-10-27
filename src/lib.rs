@@ -2,9 +2,9 @@
 //!
 //! This module provides encryption and decryption using AES-256-GCM-SIV,
 //! along with utilities for generating and managing encryption keys
-//! and nonces.
+//! and nonces, as well as helper macros for quick usage.
 //!
-//! The main types are re-exported at the module level for convenient
+//! The main types and macros are re-exported at the module level for convenient
 //! access.
 //!
 //! # Main Types
@@ -17,6 +17,14 @@
 //! - [`AesGeneratedKey`] generates cryptographically secure AES-256 keys.
 //! - [`AesGcmSivGeneratedNonce`] generates AES-GCM-SIV nonces.
 //! - [`CryptoError`] represents errors that can occur during cryptographic operations.
+//!
+//! # Macros
+//!
+//! - [`aes_key!`] - Easily initialize an `AesGcmSiv256Key` from an array or Base64 string.
+//! - [`quick_encrypt!`] - Quickly encrypts a message with a key in a single line.
+//! - [`quick_decrypt!`] - Quickly decrypts a message with a key, ciphertext, and nonce.
+pub mod macros;
+
 pub mod aes_gcm_siv_256;
 pub mod aes_gcm_siv_256_decrypt;
 pub mod aes_gcm_siv_256_encrypt;

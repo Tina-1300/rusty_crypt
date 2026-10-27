@@ -9,6 +9,18 @@ use super::aes_gcm_siv_256_key::AesGcmSiv256Key;
 use super::aes_gcm_siv_256_nonce::AesGcmSiv256Nonce;
 
 /// AES-256-GCM encryptor.
+///
+/// # Example
+/// ```rust
+/// use rusty_crypt::{AesGcmSivEncrypt, AesGcmSivGeneratedNonce, AesGeneratedKey};
+///
+/// let key = AesGeneratedKey.generate_key().unwrap();
+/// let nonce_gen = AesGcmSivGeneratedNonce;
+/// let encryptor = AesGcmSivEncrypt::new(&nonce_gen, &key).unwrap();
+///
+/// let (ciphertext, nonce) = encryptor.encrypt_bytes(b"Secret").unwrap();
+/// assert!(!ciphertext.is_empty());
+/// ```
 pub struct AesGcmSivEncrypt<'a> {
     cipher: Aes256GcmSiv,
     nonce_generator: &'a AesGcmSivGeneratedNonce,

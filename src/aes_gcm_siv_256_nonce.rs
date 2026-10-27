@@ -8,6 +8,16 @@ use crate::error::CryptoError;
 ///
 /// For AES-GCM, the recommended nonce size is 96 bits (12 bytes).
 /// A nonce MUST NOT be reused with the same key.
+///
+/// # Example
+/// ```rust
+/// use rusty_crypt::AesGcmSiv256Nonce;
+///
+/// let bytes = [0x42u8; AesGcmSiv256Nonce::SIZE];
+/// let nonce = AesGcmSiv256Nonce::from_bytes(bytes);
+///
+/// assert_eq!(nonce.size(), 12);
+/// ```
 #[derive(Clone, Copy, PartialEq, Eq, Hash)]
 pub struct AesGcmSiv256Nonce {
     bytes: [u8; Self::SIZE],

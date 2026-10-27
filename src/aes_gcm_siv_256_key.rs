@@ -9,6 +9,16 @@ use crate::error::CryptoError;
 ///
 /// The key material is stored inside [`Zeroizing`] so that it is
 /// securely cleared from memory when the key is dropped.
+///
+/// # Example
+/// ```rust
+/// use rusty_crypt::AesGcmSiv256Key;
+///
+/// let bytes = [0x42u8; AesGcmSiv256Key::SIZE];
+/// let key = AesGcmSiv256Key::from_bytes(bytes);
+///
+/// assert_eq!(key.size(), 32);
+/// ```
 pub struct AesGcmSiv256Key {
     bytes: Zeroizing<[u8; Self::SIZE]>,
 }

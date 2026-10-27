@@ -3,6 +3,16 @@ use zeroize::Zeroizing;
 use crate::{aes_gcm_siv_256_key::AesGcmSiv256Key, error::CryptoError};
 
 /// Generates cryptographically secure AES-256 keys.
+///
+/// # Example
+/// ```rust
+/// use rusty_crypt::AesGeneratedKey;
+///
+/// let generator = AesGeneratedKey;
+/// let key = generator.generate_key().unwrap();
+///
+/// assert_eq!(key.size(), 32);
+/// ```
 pub struct AesGeneratedKey;
 
 impl AesGeneratedKey {

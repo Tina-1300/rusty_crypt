@@ -1,6 +1,14 @@
 use thiserror::Error;
 
 /// Errors that can occur during cryptographic operations.
+///
+/// # Example
+/// ```rust
+/// use rusty_crypt::CryptoError;
+///
+/// let err = CryptoError::InvalidKeySize;
+/// assert_eq!(err.to_string(), "Invalid key size");
+/// ```
 #[derive(Debug, Error)]
 pub enum CryptoError {
     /// The cipher is invalid or unsupported.
