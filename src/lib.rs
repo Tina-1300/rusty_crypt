@@ -18,18 +18,18 @@
 //! - [`AesGcmSivGeneratedNonce`] generates AES-GCM-SIV nonces.
 //! - [`CryptoError`] represents errors that can occur during cryptographic operations.
 pub mod aes_gcm_siv_256;
-pub mod aes_gcm_siv_256_generated_key;
 pub mod aes_gcm_siv_256_decrypt;
 pub mod aes_gcm_siv_256_encrypt;
+pub mod aes_gcm_siv_256_generated_key;
 pub mod aes_gcm_siv_256_generated_nonce;
 pub mod aes_gcm_siv_256_key;
 pub mod aes_gcm_siv_256_nonce;
 pub mod error;
 
 pub use self::aes_gcm_siv_256::AesGcmSiv256;
-pub use self::aes_gcm_siv_256_generated_key::AesGeneratedKey;
 pub use self::aes_gcm_siv_256_decrypt::AesGcmSivDecrypt;
 pub use self::aes_gcm_siv_256_encrypt::AesGcmSivEncrypt;
+pub use self::aes_gcm_siv_256_generated_key::AesGeneratedKey;
 pub use self::aes_gcm_siv_256_generated_nonce::AesGcmSivGeneratedNonce;
 pub use self::aes_gcm_siv_256_key::AesGcmSiv256Key;
 pub use self::aes_gcm_siv_256_nonce::AesGcmSiv256Nonce;
