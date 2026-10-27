@@ -1,6 +1,6 @@
 #[cfg(test)]
 mod tests {
-    use rusty_crypt::{AesGcm256, AesGcmSiv256Key, AesGcmSiv256Nonce, CryptoError};
+    use rusty_crypt::{AesGcmSiv256, AesGcmSiv256Key, AesGcmSiv256Nonce, CryptoError};
 
     fn test_key() -> AesGcmSiv256Key {
         AesGcmSiv256Key::from_bytes([0x42; AesGcmSiv256Key::SIZE])
@@ -8,7 +8,7 @@ mod tests {
 
     #[test]
     fn test_aes_gcm_256_encrypt_decrypt() {
-        let aes = AesGcm256::new(test_key());
+        let aes = AesGcmSiv256::new(test_key());
         let plaintext = b"Hello rusty_crypt!";
 
         let (ciphertext, nonce) = aes.encrypt(plaintext).expect("Encryption should succeed");
@@ -36,7 +36,7 @@ mod tests {
 
     #[test]
     fn test_aes_gcm_256_encrypt_empty_plaintext() {
-        let aes = AesGcm256::new(test_key());
+        let aes = AesGcmSiv256::new(test_key());
 
         let (ciphertext, nonce) = aes
             .encrypt(b"")
@@ -60,7 +60,7 @@ mod tests {
 
     #[test]
     fn test_aes_gcm_256_generates_unique_nonces() {
-        let aes = AesGcm256::new(test_key());
+        let aes = AesGcmSiv256::new(test_key());
         let plaintext = b"same plaintext";
 
         let (ciphertext_1, nonce_1) = aes
@@ -85,7 +85,7 @@ mod tests {
     #[test]
     fn test_aes_gcm_256_key_accessor() {
         let key = test_key();
-        let aes = AesGcm256::new(key);
+        let aes = AesGcmSiv256::new(key);
 
         assert!(
             aes.key().is_equal(&test_key()),
@@ -101,13 +101,13 @@ mod tests {
 
     #[test]
     fn test_aes_gcm_256_wrong_key_fails_decryption() {
-        let aes = AesGcm256::new(test_key());
+        let aes = AesGcmSiv256::new(test_key());
         let plaintext = b"secret message";
 
         let (ciphertext, nonce) = aes.encrypt(plaintext).expect("Encryption should succeed");
 
         let wrong_key = AesGcmSiv256Key::from_bytes([0x99; AesGcmSiv256Key::SIZE]);
-        let wrong_aes = AesGcm256::new(wrong_key);
+        let wrong_aes = AesGcmSiv256::new(wrong_key);
 
         let result = wrong_aes.decrypt(&ciphertext, &nonce);
 
@@ -119,7 +119,7 @@ mod tests {
 
     #[test]
     fn test_aes_gcm_256_tampered_ciphertext_fails() {
-        let aes = AesGcm256::new(test_key());
+        let aes = AesGcmSiv256::new(test_key());
         let plaintext = b"authenticated message";
 
         let (mut ciphertext, nonce) = aes.encrypt(plaintext).expect("Encryption should succeed");
@@ -136,7 +136,7 @@ mod tests {
 
     #[test]
     fn test_aes_gcm_256_tampered_nonce_fails() {
-        let aes = AesGcm256::new(test_key());
+        let aes = AesGcmSiv256::new(test_key());
         let plaintext = b"authenticated message";
 
         let (ciphertext, nonce) = aes.encrypt(plaintext).expect("Encryption should succeed");
@@ -156,7 +156,7 @@ mod tests {
 
     #[test]
     fn test_aes_gcm_256_invalid_ciphertext_fails() {
-        let aes = AesGcm256::new(test_key());
+        let aes = AesGcmSiv256::new(test_key());
         let nonce = AesGcmSiv256Nonce::from_bytes([0u8; AesGcmSiv256Nonce::SIZE]);
 
         let result = aes.decrypt(&[0u8; 15], &nonce);
@@ -169,7 +169,7 @@ mod tests {
 
     #[test]
     fn test_aes_gcm_256_binary_data_roundtrip() {
-        let aes = AesGcm256::new(test_key());
+        let aes = AesGcmSiv256::new(test_key());
 
         let plaintext: Vec<u8> = (0u8..=255).collect();
 

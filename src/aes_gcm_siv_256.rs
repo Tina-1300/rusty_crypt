@@ -15,13 +15,13 @@ use super::aes_gcm_siv_256_nonce::AesGcmSiv256Nonce;
 ///
 /// A fresh cryptographically secure nonce is generated for every
 /// encryption operation.
-pub struct AesGcm256 {
+pub struct AesGcmSiv256 {
     key: AesGcmSiv256Key,
     cipher: Aes256GcmSiv,
     nonce_generator: AesGcmSivGeneratedNonce,
 }
 
-impl AesGcm256 {
+impl AesGcmSiv256 {
     /// Creates a new AES-256-GCM cipher from the given key.
     ///
     /// The AES-GCM cipher is initialized once and reused for all
