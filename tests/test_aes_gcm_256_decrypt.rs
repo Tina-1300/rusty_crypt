@@ -4,7 +4,7 @@ mod tests {
 
     use rusty_crypt::{AesGcmSiv256Key, AesGcmSiv256Nonce, AesGcmSivDecrypt, CryptoError};
 
-    use rusty_crypt::{AesGcmGeneratedNonce, AesGcmSivEncrypt};
+    use rusty_crypt::{AesGcmSivEncrypt, AesGcmSivGeneratedNonce};
 
     const VALID_KEY_BASE64: &str = "JeAe64TzfRKY0f4Mfx4slwqE3dZwQAXKd7UPZ2JF2q0=";
 
@@ -34,7 +34,7 @@ mod tests {
     fn encrypted_parts_dynamic() -> (AesGcmSiv256Nonce, Vec<u8>) {
         let key = valid_key();
 
-        let nonce_generator = AesGcmGeneratedNonce;
+        let nonce_generator = AesGcmSivGeneratedNonce;
 
         let encryptor =
             AesGcmSivEncrypt::new(&nonce_generator, &key).expect("Encryptor should be created");

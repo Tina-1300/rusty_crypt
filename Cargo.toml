@@ -5,7 +5,7 @@ edition = "2024"
 authors = ["Tina-1300"]
 description = "Rust library allowing for a very quick and simple implementation of AES-GCM encryption"
 license = "MIT"
-keywords = ["api", "cryptography", "aes-gcm", "rusty_crypt", "secure"]
+keywords = ["api", "cryptography", "aes-gcm-siv", "rusty_crypt", "secure"]
 repository = "https://github.com/Tina-1300/rusty_crypt"
 rust-version = "1.98.1"
 
@@ -36,23 +36,23 @@ criterion = "0.8.2"
 criterion-cycles-per-byte = "0.8.0"
 
 [[bench]]
-name = "aes_gcm_encrypt"
+name = "aes_gcm_siv_encrypt"
 harness = false
 
 [[bench]]
-name = "aes_gcm_decrypt"
+name = "aes_gcm_siv_decrypt"
 harness = false
 
 [[bench]]
-name = "aes_gcm"
+name = "aes_gcm_siv"
 harness = false
 
 [[bench]]
-name = "aes_gcm_key_generation"
+name = "aes_gcm_siv_key_generation"
 harness = false
 
 [[bench]]
-name = "aes_gcm_nonce_generation"
+name = "aes_gcm_siv_nonce_generation"
 harness = false
 
 

@@ -4,7 +4,7 @@ use std::time::Duration;
 use criterion::{Criterion, criterion_group, criterion_main};
 use criterion_cycles_per_byte::CyclesPerByte;
 
-use rusty_crypt::AesGcmGeneratedNonce;
+use rusty_crypt::AesGeneratedKey;
 
 fn criterion_config() -> Criterion<CyclesPerByte> {
     Criterion::default()
@@ -14,16 +14,16 @@ fn criterion_config() -> Criterion<CyclesPerByte> {
         .warm_up_time(Duration::from_secs(3))
 }
 
-fn aes_gcm_nonce_generation(c: &mut Criterion<CyclesPerByte>) {
-    let nonce_generator = AesGcmGeneratedNonce;
+fn aes_gcm_key_generation(c: &mut Criterion<CyclesPerByte>) {
+    let key_generator = AesGeneratedKey;
 
-    c.bench_function("AES-GCM nonce generation", |b| {
+    c.bench_function("AES-256-GCM-SIV key generation", |b| {
         b.iter(|| {
-            let nonce = nonce_generator
-                .generate_nonce()
-                .expect("Nonce generation should succeed");
+            let key = key_generator
+                .generate_key()
+                .expect("Key generation should succeed");
 
-            black_box(nonce);
+            black_box(key);
         });
     });
 }
@@ -31,7 +31,7 @@ fn aes_gcm_nonce_generation(c: &mut Criterion<CyclesPerByte>) {
 criterion_group! {
     name = benches;
     config = criterion_config();
-    targets = aes_gcm_nonce_generation
+    targets = aes_gcm_key_generation
 }
 
 criterion_main!(benches);

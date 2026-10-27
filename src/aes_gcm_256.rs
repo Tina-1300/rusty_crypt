@@ -4,7 +4,7 @@ use std::convert::TryFrom;
 
 use crate::error::CryptoError;
 
-use super::aes_gcm_256_generated_nonce::AesGcmGeneratedNonce;
+use super::aes_gcm_siv_256_generated_nonce::AesGcmSivGeneratedNonce;
 use super::aes_gcm_siv_256_key::AesGcmSiv256Key;
 use super::aes_gcm_siv_256_nonce::AesGcmSiv256Nonce;
 
@@ -18,7 +18,7 @@ use super::aes_gcm_siv_256_nonce::AesGcmSiv256Nonce;
 pub struct AesGcm256 {
     key: AesGcmSiv256Key,
     cipher: Aes256GcmSiv,
-    nonce_generator: AesGcmGeneratedNonce,
+    nonce_generator: AesGcmSivGeneratedNonce,
 }
 
 impl AesGcm256 {
@@ -33,7 +33,7 @@ impl AesGcm256 {
         Self {
             key,
             cipher,
-            nonce_generator: AesGcmGeneratedNonce,
+            nonce_generator: AesGcmSivGeneratedNonce,
         }
     }
 

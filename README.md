@@ -25,14 +25,14 @@ A simple and secure Rust library providing an easy-to-use interface for **AES-25
 ## Quick Start
 
 ```rust
-use rusty_crypt::{AesGcmEncrypt, AesGcmDecrypt, AesGcmSiv256Key, AesGcmGeneratedNonce};
+use rusty_crypt::{AesGcmSivEncrypt, AesGcmSivDecrypt, AesGcmSiv256Key, AesGcmSivGeneratedNonce};
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
     let key = AesGcmSiv256Key::from_bytes([0u8; AesGcmSiv256Key::SIZE]);
-    let nonce_generator = AesGcmGeneratedNonce;
+    let nonce_generator = AesGcmSivGeneratedNonce;
 
-    let encryptor = AesGcmEncrypt::new(&nonce_generator, &key)?;
-    let decryptor = AesGcmDecrypt::new(&key)?;
+    let encryptor = AesGcmSivEncrypt::new(&nonce_generator, &key)?;
+    let decryptor = AesGcmSivDecrypt::new(&key)?;
 
     let data = b"Hello, rusty_crypt!";
 

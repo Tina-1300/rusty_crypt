@@ -1,9 +1,9 @@
 use crate::{aes_gcm_siv_256_nonce::AesGcmSiv256Nonce, error::CryptoError};
 
 /// Generates cryptographically secure AES-GCM nonces.
-pub struct AesGcmGeneratedNonce;
+pub struct AesGcmSivGeneratedNonce;
 
-impl AesGcmGeneratedNonce {
+impl AesGcmSivGeneratedNonce {
     /// Generates a new cryptographically secure 96-bit nonce.
     ///
     /// A new nonce must be generated for every encryption

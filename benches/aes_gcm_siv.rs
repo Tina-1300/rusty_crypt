@@ -5,7 +5,7 @@ use criterion::{BenchmarkId, Criterion, Throughput, criterion_group, criterion_m
 
 use criterion_cycles_per_byte::CyclesPerByte;
 
-use rusty_crypt::{AesGcmGeneratedNonce, AesGcmSiv256Key, AesGcmSivEncrypt};
+use rusty_crypt::{AesGcm256, AesGcmSiv256Key};
 
 fn criterion_config() -> Criterion<CyclesPerByte> {
     Criterion::default()
@@ -15,15 +15,10 @@ fn criterion_config() -> Criterion<CyclesPerByte> {
         .warm_up_time(Duration::from_secs(3))
 }
 
-fn aes_gcm_encrypt(c: &mut Criterion<CyclesPerByte>) {
+fn aes_gcm(c: &mut Criterion<CyclesPerByte>) {
     let key = AesGcmSiv256Key::from_bytes([0u8; AesGcmSiv256Key::SIZE]);
 
-    let nonce_generator = AesGcmGeneratedNonce;
-
-    let encryptor =
-        AesGcmSivEncrypt::new(&nonce_generator, &key).expect("Encryptor creation should succeed");
-
-    let mut group = c.benchmark_group("AES-256-GCM Encrypt");
+    let cipher = AesGcm256::new(key);
 
     let sizes = [
         ("1 B", 1),
@@ -47,34 +42,63 @@ fn aes_gcm_encrypt(c: &mut Criterion<CyclesPerByte>) {
         ("256 MiB", 256 * 1024 * 1024),
     ];
 
+    let mut encrypt_group = c.benchmark_group("AES-256-GCM-SIV/encrypt");
+
     for (name, size) in sizes {
         let plaintext = vec![0u8; size];
 
-        group.throughput(Throughput::Bytes(size as u64));
+        encrypt_group.throughput(Throughput::Bytes(size as u64));
 
-        group.bench_with_input(
-            BenchmarkId::new("encrypt_bytes", name),
+        encrypt_group.bench_with_input(
+            BenchmarkId::new("encrypt", name),
             &plaintext,
             |b, plaintext| {
                 b.iter(|| {
-                    let (ciphertext, nonce) = encryptor
-                        .encrypt_bytes(black_box(plaintext))
+                    let result = cipher
+                        .encrypt(black_box(plaintext))
                         .expect("Encryption should succeed");
 
-                    black_box(ciphertext);
-                    black_box(nonce);
+                    black_box(result);
                 });
             },
         );
     }
 
-    group.finish();
+    encrypt_group.finish();
+
+    let mut decrypt_group = c.benchmark_group("AES-256-GCM-SIV/decrypt");
+
+    for (name, size) in sizes {
+        let plaintext = vec![0u8; size];
+
+        let (ciphertext, nonce) = cipher
+            .encrypt(&plaintext)
+            .expect("Encryption setup should succeed");
+
+        decrypt_group.throughput(Throughput::Bytes(size as u64));
+
+        decrypt_group.bench_with_input(
+            BenchmarkId::new("decrypt", name),
+            &(ciphertext, nonce),
+            |b, (ciphertext, nonce)| {
+                b.iter(|| {
+                    let result = cipher
+                        .decrypt(black_box(ciphertext), black_box(nonce))
+                        .expect("Decryption should succeed");
+
+                    black_box(result);
+                });
+            },
+        );
+    }
+
+    decrypt_group.finish();
 }
 
 criterion_group! {
     name = benches;
     config = criterion_config();
-    targets = aes_gcm_encrypt
+    targets = aes_gcm
 }
 
 criterion_main!(benches);

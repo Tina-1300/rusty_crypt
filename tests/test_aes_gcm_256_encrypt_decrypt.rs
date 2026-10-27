@@ -1,13 +1,13 @@
 #[cfg(test)]
 mod tests {
     use rusty_crypt::{
-        AesGcmGeneratedNonce, AesGcmSiv256Key, AesGcmSiv256Nonce, AesGcmSivDecrypt,
-        AesGcmSivEncrypt, AesGeneratedKey, CryptoError,
+        AesGcmSiv256Key, AesGcmSiv256Nonce, AesGcmSivDecrypt, AesGcmSivEncrypt,
+        AesGcmSivGeneratedNonce, AesGeneratedKey, CryptoError,
     };
 
     fn create_encryptor<'a>(
         key: &'a AesGcmSiv256Key,
-        nonce_generator: &'a AesGcmGeneratedNonce,
+        nonce_generator: &'a AesGcmSivGeneratedNonce,
     ) -> AesGcmSivEncrypt<'a> {
         AesGcmSivEncrypt::new(nonce_generator, key).expect("Encryptor should be created")
     }
@@ -24,7 +24,7 @@ mod tests {
             .generate_key()
             .expect("AES-256 key generation should succeed");
 
-        let nonce_generator = AesGcmGeneratedNonce;
+        let nonce_generator = AesGcmSivGeneratedNonce;
 
         let encryptor = create_encryptor(&key, &nonce_generator);
 
@@ -65,7 +65,7 @@ mod tests {
             .generate_key()
             .expect("AES-256 key generation should succeed");
 
-        let nonce_generator = AesGcmGeneratedNonce;
+        let nonce_generator = AesGcmSivGeneratedNonce;
 
         let encryptor = create_encryptor(&key, &nonce_generator);
 
@@ -93,7 +93,7 @@ mod tests {
             .generate_key()
             .expect("AES-256 key generation should succeed");
 
-        let nonce_generator = AesGcmGeneratedNonce;
+        let nonce_generator = AesGcmSivGeneratedNonce;
 
         let encryptor = create_encryptor(&key, &nonce_generator);
 
@@ -127,7 +127,7 @@ mod tests {
             .generate_key()
             .expect("AES-256 key generation should succeed");
 
-        let nonce_generator = AesGcmGeneratedNonce;
+        let nonce_generator = AesGcmSivGeneratedNonce;
 
         let encryptor = create_encryptor(&key, &nonce_generator);
 
@@ -167,7 +167,7 @@ mod tests {
             "Generated keys should normally be different"
         );
 
-        let nonce_generator = AesGcmGeneratedNonce;
+        let nonce_generator = AesGcmSivGeneratedNonce;
 
         let encryptor = create_encryptor(&encryption_key, &nonce_generator);
 
@@ -193,7 +193,7 @@ mod tests {
             .generate_key()
             .expect("AES-256 key generation should succeed");
 
-        let nonce_generator = AesGcmGeneratedNonce;
+        let nonce_generator = AesGcmSivGeneratedNonce;
 
         let encryptor = create_encryptor(&key, &nonce_generator);
 
@@ -226,7 +226,7 @@ mod tests {
             .generate_key()
             .expect("AES-256 key generation should succeed");
 
-        let nonce_generator = AesGcmGeneratedNonce;
+        let nonce_generator = AesGcmSivGeneratedNonce;
 
         let encryptor = create_encryptor(&key, &nonce_generator);
 
@@ -264,7 +264,7 @@ mod tests {
             .generate_key()
             .expect("AES-256 key generation should succeed");
 
-        let nonce_generator = AesGcmGeneratedNonce;
+        let nonce_generator = AesGcmSivGeneratedNonce;
 
         let encryptor = create_encryptor(&key, &nonce_generator);
 
@@ -301,7 +301,7 @@ mod tests {
             .generate_key()
             .expect("AES-256 key generation should succeed");
 
-        let nonce_generator = AesGcmGeneratedNonce;
+        let nonce_generator = AesGcmSivGeneratedNonce;
 
         let encryptor = create_encryptor(&key, &nonce_generator);
 
