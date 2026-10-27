@@ -4,7 +4,7 @@ use std::convert::TryFrom;
 
 use crate::error::CryptoError;
 
-use super::aes_gcm_256_key::AesGcm256Key;
+use super::aes_gcm_siv_256_key::AesGcmSiv256Key;
 use super::aes_gcm_256_nonce::AesGcm256Nonce;
 
 /// AES-256-GCM decryptor.
@@ -14,7 +14,7 @@ pub struct AesGcmDecrypt {
 
 impl AesGcmDecrypt {
     /// Creates a new AES-256-GCM decryptor from the given key.
-    pub fn new(key: &AesGcm256Key) -> Result<Self, CryptoError> {
+    pub fn new(key: &AesGcmSiv256Key) -> Result<Self, CryptoError> {
         let cipher = Aes256GcmSiv::new_from_slice(key.as_bytes())
             .map_err(|_| CryptoError::InvalidKeySize)?;
 

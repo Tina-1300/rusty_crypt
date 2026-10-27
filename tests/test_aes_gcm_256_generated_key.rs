@@ -2,7 +2,7 @@
 mod tests {
     use base64::{Engine as _, engine::general_purpose};
 
-    use rusty_crypt::{AesGcm256Key, AesGeneratedKey, CryptoError};
+    use rusty_crypt::{AesGcmSiv256Key, AesGeneratedKey, CryptoError};
 
     #[test]
     fn test_aes_gcm_256_generated_key_has_expected_size() {
@@ -10,11 +10,11 @@ mod tests {
             .generate_key()
             .expect("Key generation should succeed");
 
-        assert_eq!(AesGcm256Key::SIZE, 32, "AES-256 key size must be 32 bytes");
+        assert_eq!(AesGcmSiv256Key::SIZE, 32, "AES-256 key size must be 32 bytes");
 
         assert_eq!(
             key.size(),
-            AesGcm256Key::SIZE,
+            AesGcmSiv256Key::SIZE,
             "Generated key must have the AES-256 key size"
         );
     }
@@ -39,17 +39,17 @@ mod tests {
 
     #[test]
     fn test_aes_gcm_256_key_from_bytes() {
-        let bytes = [0x42u8; AesGcm256Key::SIZE];
+        let bytes = [0x42u8; AesGcmSiv256Key::SIZE];
 
-        let key = AesGcm256Key::from_bytes(bytes);
+        let key = AesGcmSiv256Key::from_bytes(bytes);
 
         assert_eq!(
             key.size(),
-            AesGcm256Key::SIZE,
+            AesGcmSiv256Key::SIZE,
             "Key created from bytes must have the correct size"
         );
 
-        let same_key = AesGcm256Key::from_bytes(bytes);
+        let same_key = AesGcmSiv256Key::from_bytes(bytes);
 
         assert!(
             key.is_equal(&same_key),
@@ -59,8 +59,8 @@ mod tests {
 
     #[test]
     fn test_aes_gcm_256_key_from_bytes_different_keys() {
-        let key1 = AesGcm256Key::from_bytes([0x00u8; AesGcm256Key::SIZE]);
-        let key2 = AesGcm256Key::from_bytes([0xFFu8; AesGcm256Key::SIZE]);
+        let key1 = AesGcmSiv256Key::from_bytes([0x00u8; AesGcmSiv256Key::SIZE]);
+        let key2 = AesGcmSiv256Key::from_bytes([0xFFu8; AesGcmSiv256Key::SIZE]);
 
         assert!(
             !key1.is_equal(&key2),
@@ -70,13 +70,13 @@ mod tests {
 
     #[test]
     fn test_aes_gcm_256_key_try_from_bytes_valid() {
-        let bytes = [0xABu8; AesGcm256Key::SIZE];
+        let bytes = [0xABu8; AesGcmSiv256Key::SIZE];
 
-        let key = AesGcm256Key::try_from_bytes(&bytes).expect("32-byte key should be accepted");
+        let key = AesGcmSiv256Key::try_from_bytes(&bytes).expect("32-byte key should be accepted");
 
         assert_eq!(
             key.size(),
-            AesGcm256Key::SIZE,
+            AesGcmSiv256Key::SIZE,
             "Valid key must have the AES-256 key size"
         );
     }
@@ -88,7 +88,7 @@ mod tests {
         for size in invalid_sizes {
             let bytes = vec![0u8; size];
 
-            let result = AesGcm256Key::try_from_bytes(&bytes);
+            let result = AesGcmSiv256Key::try_from_bytes(&bytes);
 
             assert!(
                 matches!(result, Err(CryptoError::InvalidKeySize)),
@@ -100,12 +100,12 @@ mod tests {
 
     #[test]
     fn test_aes_gcm_256_key_try_from_slice_trait() {
-        let bytes = [0x11u8; AesGcm256Key::SIZE];
+        let bytes = [0x11u8; AesGcmSiv256Key::SIZE];
 
-        let key = AesGcm256Key::try_from(bytes.as_slice())
+        let key = AesGcmSiv256Key::try_from(bytes.as_slice())
             .expect("TryFrom<&[u8]> should accept a 32-byte slice");
 
-        let expected = AesGcm256Key::from_bytes(bytes);
+        let expected = AesGcmSiv256Key::from_bytes(bytes);
 
         assert!(
             key.is_equal(&expected),
@@ -115,14 +115,14 @@ mod tests {
 
     #[test]
     fn test_aes_gcm_256_key_try_from_str_valid_base64() {
-        let bytes = [0x55u8; AesGcm256Key::SIZE];
+        let bytes = [0x55u8; AesGcmSiv256Key::SIZE];
 
         let encoded = general_purpose::STANDARD.encode(bytes);
 
-        let key = AesGcm256Key::try_from(encoded.as_str())
+        let key = AesGcmSiv256Key::try_from(encoded.as_str())
             .expect("Valid Base64 AES-256 key should be accepted");
 
-        let expected = AesGcm256Key::from_bytes(bytes);
+        let expected = AesGcmSiv256Key::from_bytes(bytes);
 
         assert!(
             key.is_equal(&expected),
@@ -132,13 +132,13 @@ mod tests {
 
     #[test]
     fn test_aes_gcm_256_key_from_base64_valid() {
-        let bytes = [0xA5u8; AesGcm256Key::SIZE];
+        let bytes = [0xA5u8; AesGcmSiv256Key::SIZE];
 
         let encoded = general_purpose::STANDARD.encode(bytes);
 
-        let key = AesGcm256Key::from_base64(&encoded).expect("Valid Base64 key should be accepted");
+        let key = AesGcmSiv256Key::from_base64(&encoded).expect("Valid Base64 key should be accepted");
 
-        let expected = AesGcm256Key::from_bytes(bytes);
+        let expected = AesGcmSiv256Key::from_bytes(bytes);
 
         assert!(
             key.is_equal(&expected),
@@ -148,7 +148,7 @@ mod tests {
 
     #[test]
     fn test_aes_gcm_256_key_from_base64_invalid_encoding() {
-        let result = AesGcm256Key::from_base64("not-valid-base64!!!");
+        let result = AesGcmSiv256Key::from_base64("not-valid-base64!!!");
 
         assert!(
             matches!(result, Err(CryptoError::InvalidBase64(_))),
@@ -162,7 +162,7 @@ mod tests {
 
         let encoded = general_purpose::STANDARD.encode(invalid_key);
 
-        let result = AesGcm256Key::from_base64(&encoded);
+        let result = AesGcmSiv256Key::from_base64(&encoded);
 
         assert!(
             matches!(result, Err(CryptoError::InvalidKeySize)),
@@ -172,7 +172,7 @@ mod tests {
 
     #[test]
     fn test_aes_gcm_256_key_debug_is_redacted() {
-        let key = AesGcm256Key::from_bytes([0xAAu8; AesGcm256Key::SIZE]);
+        let key = AesGcmSiv256Key::from_bytes([0xAAu8; AesGcmSiv256Key::SIZE]);
 
         let debug = format!("{key:?}");
 
@@ -194,11 +194,11 @@ mod tests {
 
     #[test]
     fn test_aes_gcm_256_key_equality_is_consistent() {
-        let bytes = [0x7Fu8; AesGcm256Key::SIZE];
+        let bytes = [0x7Fu8; AesGcmSiv256Key::SIZE];
 
-        let key1 = AesGcm256Key::from_bytes(bytes);
-        let key2 = AesGcm256Key::from_bytes(bytes);
-        let key3 = AesGcm256Key::from_bytes([0x80u8; AesGcm256Key::SIZE]);
+        let key1 = AesGcmSiv256Key::from_bytes(bytes);
+        let key2 = AesGcmSiv256Key::from_bytes(bytes);
+        let key3 = AesGcmSiv256Key::from_bytes([0x80u8; AesGcmSiv256Key::SIZE]);
 
         assert!(key1.is_equal(&key1), "A key must be equal to itself");
 
@@ -217,9 +217,9 @@ mod tests {
 
     #[test]
     fn test_aes_gcm_256_key_partial_eq() {
-        let key1 = AesGcm256Key::from_bytes([0x42u8; AesGcm256Key::SIZE]);
-        let key2 = AesGcm256Key::from_bytes([0x42u8; AesGcm256Key::SIZE]);
-        let key3 = AesGcm256Key::from_bytes([0x43u8; AesGcm256Key::SIZE]);
+        let key1 = AesGcmSiv256Key::from_bytes([0x42u8; AesGcmSiv256Key::SIZE]);
+        let key2 = AesGcmSiv256Key::from_bytes([0x42u8; AesGcmSiv256Key::SIZE]);
+        let key3 = AesGcmSiv256Key::from_bytes([0x43u8; AesGcmSiv256Key::SIZE]);
 
         assert_eq!(key1, key2);
         assert_ne!(key1, key3);
@@ -227,8 +227,8 @@ mod tests {
 
     #[test]
     fn test_aes_gcm_256_key_eq_is_reflexive_and_symmetric() {
-        let key1 = AesGcm256Key::from_bytes([0x42u8; AesGcm256Key::SIZE]);
-        let key2 = AesGcm256Key::from_bytes([0x42u8; AesGcm256Key::SIZE]);
+        let key1 = AesGcmSiv256Key::from_bytes([0x42u8; AesGcmSiv256Key::SIZE]);
+        let key2 = AesGcmSiv256Key::from_bytes([0x42u8; AesGcmSiv256Key::SIZE]);
 
         assert_eq!(key1, key1);
         assert_eq!(key1, key2);
@@ -237,9 +237,9 @@ mod tests {
 
     #[test]
     fn test_aes_gcm_256_key_eq_is_transitive() {
-        let key1 = AesGcm256Key::from_bytes([0x42u8; AesGcm256Key::SIZE]);
-        let key2 = AesGcm256Key::from_bytes([0x42u8; AesGcm256Key::SIZE]);
-        let key3 = AesGcm256Key::from_bytes([0x42u8; AesGcm256Key::SIZE]);
+        let key1 = AesGcmSiv256Key::from_bytes([0x42u8; AesGcmSiv256Key::SIZE]);
+        let key2 = AesGcmSiv256Key::from_bytes([0x42u8; AesGcmSiv256Key::SIZE]);
+        let key3 = AesGcmSiv256Key::from_bytes([0x42u8; AesGcmSiv256Key::SIZE]);
 
         assert_eq!(key1, key2);
         assert_eq!(key2, key3);
@@ -248,9 +248,9 @@ mod tests {
 
     #[test]
     fn test_aes_gcm_256_key_partial_eq_matches_constant_time_equality() {
-        let key1 = AesGcm256Key::from_bytes([0x42u8; AesGcm256Key::SIZE]);
-        let key2 = AesGcm256Key::from_bytes([0x42u8; AesGcm256Key::SIZE]);
-        let key3 = AesGcm256Key::from_bytes([0x43u8; AesGcm256Key::SIZE]);
+        let key1 = AesGcmSiv256Key::from_bytes([0x42u8; AesGcmSiv256Key::SIZE]);
+        let key2 = AesGcmSiv256Key::from_bytes([0x42u8; AesGcmSiv256Key::SIZE]);
+        let key3 = AesGcmSiv256Key::from_bytes([0x43u8; AesGcmSiv256Key::SIZE]);
 
         assert_eq!(
             key1 == key2,
@@ -267,17 +267,17 @@ mod tests {
 
     #[test]
     fn test_aes_gcm_256_key_eq_does_not_depend_on_object_identity() {
-        let bytes = [0xABu8; AesGcm256Key::SIZE];
+        let bytes = [0xABu8; AesGcmSiv256Key::SIZE];
 
-        let key1 = AesGcm256Key::from_bytes(bytes);
-        let key2 = AesGcm256Key::from_bytes(bytes);
+        let key1 = AesGcmSiv256Key::from_bytes(bytes);
+        let key2 = AesGcmSiv256Key::from_bytes(bytes);
 
         assert_eq!(key1, key2, "Keys with identical key material must be equal");
     }
 
     #[test]
     fn test_aes_gcm_256_key_clone_preserves_key_material() {
-        let key = AesGcm256Key::from_bytes([0x42u8; AesGcm256Key::SIZE]);
+        let key = AesGcmSiv256Key::from_bytes([0x42u8; AesGcmSiv256Key::SIZE]);
 
         let cloned_key = key.clone();
 
@@ -294,9 +294,9 @@ mod tests {
 
     #[test]
     fn test_aes_gcm_256_key_clone_is_independent() {
-        let key = AesGcm256Key::from_bytes([0x42u8; AesGcm256Key::SIZE]);
+        let key = AesGcmSiv256Key::from_bytes([0x42u8; AesGcmSiv256Key::SIZE]);
         let cloned_key = key.clone();
-        let different_key = AesGcm256Key::from_bytes([0x43u8; AesGcm256Key::SIZE]);
+        let different_key = AesGcmSiv256Key::from_bytes([0x43u8; AesGcmSiv256Key::SIZE]);
 
         assert_eq!(key, cloned_key);
         assert_ne!(cloned_key, different_key);
@@ -305,11 +305,11 @@ mod tests {
 
     #[test]
     fn test_aes_gcm_256_key_from_array_trait() {
-        let bytes = [0xCDu8; AesGcm256Key::SIZE];
+        let bytes = [0xCDu8; AesGcmSiv256Key::SIZE];
 
-        let key: AesGcm256Key = bytes.into();
+        let key: AesGcmSiv256Key = bytes.into();
 
-        let expected = AesGcm256Key::from_bytes(bytes);
+        let expected = AesGcmSiv256Key::from_bytes(bytes);
 
         assert_eq!(
             key, expected,
@@ -325,9 +325,9 @@ mod tests {
             0x1C, 0x1D, 0x1E, 0x1F,
         ];
 
-        let key: AesGcm256Key = bytes.into();
+        let key: AesGcmSiv256Key = bytes.into();
 
-        let expected = AesGcm256Key::from_bytes(bytes);
+        let expected = AesGcmSiv256Key::from_bytes(bytes);
 
         assert_eq!(
             key, expected,

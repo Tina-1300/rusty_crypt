@@ -9,11 +9,11 @@ use crate::error::CryptoError;
 ///
 /// The key material is stored inside [`Zeroizing`] so that it is
 /// securely cleared from memory when the key is dropped.
-pub struct AesGcm256Key {
+pub struct AesGcmSiv256Key {
     bytes: Zeroizing<[u8; Self::SIZE]>,
 }
 
-impl AesGcm256Key {
+impl AesGcmSiv256Key {
     /// AES-256 key size in bytes.
     pub const SIZE: usize = 32;
 
@@ -82,7 +82,7 @@ impl AesGcm256Key {
     }
 }
 
-impl TryFrom<&[u8]> for AesGcm256Key {
+impl TryFrom<&[u8]> for AesGcmSiv256Key {
     type Error = CryptoError;
 
     #[inline]
@@ -91,14 +91,14 @@ impl TryFrom<&[u8]> for AesGcm256Key {
     }
 }
 
-impl From<[u8; AesGcm256Key::SIZE]> for AesGcm256Key {
+impl From<[u8; AesGcmSiv256Key::SIZE]> for AesGcmSiv256Key {
     #[inline]
     fn from(bytes: [u8; Self::SIZE]) -> Self {
         Self::from_bytes(bytes)
     }
 }
 
-impl TryFrom<&str> for AesGcm256Key {
+impl TryFrom<&str> for AesGcmSiv256Key {
     type Error = CryptoError;
 
     #[inline]
@@ -107,30 +107,30 @@ impl TryFrom<&str> for AesGcm256Key {
     }
 }
 
-impl PartialEq for AesGcm256Key {
+impl PartialEq for AesGcmSiv256Key {
     #[inline]
     fn eq(&self, other: &Self) -> bool {
         self.bytes.as_ref().ct_eq(other.bytes.as_ref()).into()
     }
 }
 
-impl Eq for AesGcm256Key {}
+impl Eq for AesGcmSiv256Key {}
 
-impl Clone for AesGcm256Key {
+impl Clone for AesGcmSiv256Key {
     #[inline]
     fn clone(&self) -> Self {
         Self::from_bytes(*self.bytes)
     }
 }
 
-impl AsRef<[u8]> for AesGcm256Key {
+impl AsRef<[u8]> for AesGcmSiv256Key {
     #[inline]
     fn as_ref(&self) -> &[u8] {
         self.bytes.as_ref()
     }
 }
 
-impl std::fmt::Debug for AesGcm256Key {
+impl std::fmt::Debug for AesGcmSiv256Key {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         f.debug_struct("AesGcm256Key")
             .field("bytes", &"[REDACTED]")

@@ -1,9 +1,9 @@
 #[cfg(test)]
 mod tests {
-    use rusty_crypt::{AesGcm256, AesGcm256Key, AesGcm256Nonce, CryptoError};
+    use rusty_crypt::{AesGcm256, AesGcmSiv256Key, AesGcm256Nonce, CryptoError};
 
-    fn test_key() -> AesGcm256Key {
-        AesGcm256Key::from_bytes([0x42; AesGcm256Key::SIZE])
+    fn test_key() -> AesGcmSiv256Key {
+        AesGcmSiv256Key::from_bytes([0x42; AesGcmSiv256Key::SIZE])
     }
 
     #[test]
@@ -94,7 +94,7 @@ mod tests {
 
         assert_eq!(
             aes.key().size(),
-            AesGcm256Key::SIZE,
+            AesGcmSiv256Key::SIZE,
             "AES-256 key should contain 32 bytes"
         );
     }
@@ -106,7 +106,7 @@ mod tests {
 
         let (ciphertext, nonce) = aes.encrypt(plaintext).expect("Encryption should succeed");
 
-        let wrong_key = AesGcm256Key::from_bytes([0x99; AesGcm256Key::SIZE]);
+        let wrong_key = AesGcmSiv256Key::from_bytes([0x99; AesGcmSiv256Key::SIZE]);
         let wrong_aes = AesGcm256::new(wrong_key);
 
         let result = wrong_aes.decrypt(&ciphertext, &nonce);

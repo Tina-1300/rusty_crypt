@@ -5,7 +5,7 @@ use criterion::{BenchmarkId, Criterion, Throughput, criterion_group, criterion_m
 
 use criterion_cycles_per_byte::CyclesPerByte;
 
-use rusty_crypt::{AesGcm256, AesGcm256Key};
+use rusty_crypt::{AesGcm256, AesGcmSiv256Key};
 
 fn criterion_config() -> Criterion<CyclesPerByte> {
     Criterion::default()
@@ -16,7 +16,7 @@ fn criterion_config() -> Criterion<CyclesPerByte> {
 }
 
 fn aes_gcm(c: &mut Criterion<CyclesPerByte>) {
-    let key = AesGcm256Key::from_bytes([0u8; AesGcm256Key::SIZE]);
+    let key = AesGcmSiv256Key::from_bytes([0u8; AesGcmSiv256Key::SIZE]);
 
     let cipher = AesGcm256::new(key);
 

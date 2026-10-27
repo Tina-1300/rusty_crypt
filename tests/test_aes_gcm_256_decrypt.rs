@@ -2,7 +2,7 @@
 mod tests {
     use base64::{Engine as _, engine::general_purpose};
 
-    use rusty_crypt::{AesGcm256Key, AesGcm256Nonce, AesGcmDecrypt, CryptoError};
+    use rusty_crypt::{AesGcmSiv256Key, AesGcm256Nonce, AesGcmDecrypt, CryptoError};
 
     use rusty_crypt::{AesGcmEncrypt, AesGcmGeneratedNonce};
 
@@ -15,12 +15,12 @@ mod tests {
 
     const EXPECTED_PLAINTEXT: &[u8] = b"Hello rusty_crypt!";
 
-    fn valid_key() -> AesGcm256Key {
-        AesGcm256Key::from_base64(VALID_KEY_BASE64).expect("Test key should be valid")
+    fn valid_key() -> AesGcmSiv256Key {
+        AesGcmSiv256Key::from_base64(VALID_KEY_BASE64).expect("Test key should be valid")
     }
 
-    fn wrong_key() -> AesGcm256Key {
-        AesGcm256Key::from_base64(WRONG_KEY_BASE64).expect("Test key should be valid")
+    fn wrong_key() -> AesGcmSiv256Key {
+        AesGcmSiv256Key::from_base64(WRONG_KEY_BASE64).expect("Test key should be valid")
     }
 
     fn encrypted_parts() -> (AesGcm256Nonce, Vec<u8>) {
@@ -194,7 +194,7 @@ mod tests {
 
     #[test]
     fn test_aes_gcm_256_invalid_key_size() {
-        let result = AesGcm256Key::try_from_bytes(&[0u8; AesGcm256Key::SIZE - 1]);
+        let result = AesGcmSiv256Key::try_from_bytes(&[0u8; AesGcmSiv256Key::SIZE - 1]);
 
         assert!(
             matches!(result, Err(CryptoError::InvalidKeySize)),
@@ -204,13 +204,13 @@ mod tests {
 
     #[test]
     fn test_aes_gcm_256_valid_key_size() {
-        let bytes = [0x42u8; AesGcm256Key::SIZE];
+        let bytes = [0x42u8; AesGcmSiv256Key::SIZE];
 
-        let key = AesGcm256Key::try_from_bytes(&bytes).expect("32-byte key should be valid");
+        let key = AesGcmSiv256Key::try_from_bytes(&bytes).expect("32-byte key should be valid");
 
         assert_eq!(
             key.size(),
-            AesGcm256Key::SIZE,
+            AesGcmSiv256Key::SIZE,
             "AES-256 key must contain 32 bytes"
         );
     }
@@ -219,9 +219,9 @@ mod tests {
     fn test_aes_gcm_256_key_base64_roundtrip() {
         let key = valid_key();
 
-        let encoded = general_purpose::STANDARD.encode([0u8; AesGcm256Key::SIZE]);
+        let encoded = general_purpose::STANDARD.encode([0u8; AesGcmSiv256Key::SIZE]);
 
-        let decoded_key = AesGcm256Key::from_base64(&encoded)
+        let decoded_key = AesGcmSiv256Key::from_base64(&encoded)
             .expect("Valid Base64 AES-256 key should be accepted");
 
         assert!(
@@ -232,7 +232,7 @@ mod tests {
 
     #[test]
     fn test_aes_gcm_256_invalid_base64_key() {
-        let result = AesGcm256Key::from_base64("not-valid-base64!!!");
+        let result = AesGcmSiv256Key::from_base64("not-valid-base64!!!");
 
         assert!(
             matches!(result, Err(CryptoError::InvalidBase64(_))),
@@ -242,11 +242,11 @@ mod tests {
 
     #[test]
     fn test_aes_gcm_256_key_equality() {
-        let bytes = [0x42u8; AesGcm256Key::SIZE];
+        let bytes = [0x42u8; AesGcmSiv256Key::SIZE];
 
-        let key1 = AesGcm256Key::from_bytes(bytes);
-        let key2 = AesGcm256Key::from_bytes(bytes);
-        let key3 = AesGcm256Key::from_bytes([0x24u8; AesGcm256Key::SIZE]);
+        let key1 = AesGcmSiv256Key::from_bytes(bytes);
+        let key2 = AesGcmSiv256Key::from_bytes(bytes);
+        let key3 = AesGcmSiv256Key::from_bytes([0x24u8; AesGcmSiv256Key::SIZE]);
 
         assert!(key1.is_equal(&key2), "Identical keys should be equal");
 

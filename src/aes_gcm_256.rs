@@ -5,7 +5,7 @@ use std::convert::TryFrom;
 use crate::error::CryptoError;
 
 use super::aes_gcm_256_generated_nonce::AesGcmGeneratedNonce;
-use super::aes_gcm_256_key::AesGcm256Key;
+use super::aes_gcm_siv_256_key::AesGcmSiv256Key;
 use super::aes_gcm_256_nonce::AesGcm256Nonce;
 
 /// High-level AES-256-GCM cipher.
@@ -16,7 +16,7 @@ use super::aes_gcm_256_nonce::AesGcm256Nonce;
 /// A fresh cryptographically secure nonce is generated for every
 /// encryption operation.
 pub struct AesGcm256 {
-    key: AesGcm256Key,
+    key: AesGcmSiv256Key,
     cipher: Aes256GcmSiv,
     nonce_generator: AesGcmGeneratedNonce,
 }
@@ -27,7 +27,7 @@ impl AesGcm256 {
     /// The AES-GCM cipher is initialized once and reused for all
     /// subsequent encryption and decryption operations.
     #[inline]
-    pub fn new(key: AesGcm256Key) -> Self {
+    pub fn new(key: AesGcmSiv256Key) -> Self {
         let cipher = Aes256GcmSiv::new(key.as_key());
 
         Self {
@@ -84,7 +84,7 @@ impl AesGcm256 {
 
     /// Returns a reference to the protected AES-256 key.
     #[inline]
-    pub fn key(&self) -> &AesGcm256Key {
+    pub fn key(&self) -> &AesGcmSiv256Key {
         &self.key
     }
 }
